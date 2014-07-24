@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+<style>
+.points-container .point-editor {
+  width: 75%;
+  display: inline-block;
+}
+.points-container a {
+  width: 20%;
+}
+h4.player-name {
+  float: left;
+}
+.current-points {
+  font-size: 2em;
+  color: rgb(7, 113, 206);
+  font-weight: bold;
+  font-family: monospace;
+  }
+.status {
+  margin-top: 1em;
+  font-weight: bold;
+  font-family: monospace;
+}
+.status {
+  font-size: 1.1em;
+  line-height: 3.1em;
+}
+.avg-label {
+  font-weight: normal;
+  color: #CCC;
+  margin-right: 1em;
+}
+.avg {
+  color: #999;
+  width: 4em;
+}
+.gen-points {
+  text-align: right;
+  color: #999;
+  width: 4em;
+}
+.point-lists {
+  margin-right: 25%
+}
+.points {
+  width: 4em;
+}
+.shot-list > span {
+  display: block;
+  text-align: right;
+}
+  
+
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <p></p>
+    <div class="row">
+      <div class="col-xs-6 col-sm-6 col-md-6">
+        <div class="well">
+          <div class="player1">
+            <div class="clearfix">
+              <h4 class="player-name">Randall</h4>
+              <span class="current-points pull-right">301</span>
+            </div>
+            <div class="form-group_ points-container">
+              <div class="input-group_">
+                <!--div class="input-group-addon"></div-->
+                <input type="text" class="form-control point-editor" placeholder="Enter points">
+                <a class="save btn btn-success pull-right">Save</a>
+              </div>
+            </div>
+            
+            <div class="point-lists">
+              <div class="status clearfix">
+                <span class="avg-label pull-left clearfix">avg</span>
+                <span class="avg pull-left clearfix"></span>
+                <span class="gen-points pull-right clearfix"></span>
+              </div>
+
+              <div class="shot-list pull-right">
+                <!--span><a href="#">301<span class="glyphicon glyphicon-remove-circle"></span></a></span>
+                <span>87</span-->
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+<script>
+  
+  
+  
+function getCurrentPoints(containerSelector) {
+  var currentPoints = $(containerSelector + ' .current-points').text();
+  if (currentPoints === '') {
+    currentPoints = 301;
+  }
+}
+
+function _editorItemToPoints(item) {
+  var convItem = item;
+  var double = false;
+  var treble = false;
+  if (item.length > 0 && item.toUpperCase().indexOf('T') === 0) {
+    treble = true;
+    convItem = item.substr(1);
+  }
+  if (item.length > 0 && item.toUpperCase().indexOf('D') === 0) {
+    double = true;
+    convItem = item.substr(1);
+  }
+  var p = Number(convItem);
+  if (!isNaN(p)) {
+    if (treble) {
+      return p * 3;
+    }
+    if (double) {
+      return p * 2;
+    }
+    return p;
+  }
+  return 0;
+}
+
+/**
+ * Converts editor into points
+ * @param  {String} containerSelector jquery selector
+ * @return {Object} 
+ *  {
+ *    points: // sum of the points
+ *    darts: // array of points of darts
+ *    rawshots: // string representation
+ *  }
+ */
+function _editorPoints(containerSelector) {
+  var pointEditor = $(containerSelector + ' .point-editor');
+  var genPoints = $(containerSelector + ' .gen-points');
+
+  var value = pointEditor.val();
+  var darts = [];
+  var dartsStr = value.split(' ');
+  
+  // convert dartsStr into darts[]
+  $.each(dartsStr,function (i, item) {
+    var dartPoint = _editorItemToPoints(item);
+    darts.push(dartPoint);
+  });
+  
+  if (darts.length > 0) {
+    return {
+      points: darts.reduce(function (l,r) { return l + r;}),
+      darts: darts,
+      rawshots: dartsStr
+    };
+  } else {
+    return undefined;
+  }
+}
+
+function _saveRound(containerSelector, editorPoints) {
+  // save points
+  points -= editorPoints.points;
+  shots.push(editorPoints);
+  $(containerSelector + ' .current-points').text(points);
+  $(containerSelector + ' .shot-list').append('<span title="' + editorPoints.rawshots + '">' + points + '</span>');
+
+  // calc avg
+  var sum = X01 - points;
+  var avg = Math.round(sum / shots.length);
+  $(containerSelector + ' .avg').text(avg);
+
+  // cleanup
+  $(containerSelector + ' .point-editor').val('');
+  $(containerSelector + ' .gen-points').text('');
+}
+
+var X01 = 301;
+var points = X01;
+var shots = [];
+
+function init(containerSelector) {
+  // realtime update
+  $(containerSelector + ' .point-editor').keyup(function () {
+    var editorPoints =_editorPoints(containerSelector);
+    if (editorPoints !== undefined) {
+      $(containerSelector + ' .gen-points').text(editorPoints.points);
+    } else {
+      $(containerSelector + ' .gen-points').text('');
+    }
+  });
+
+  // save points
+  $(containerSelector + ' .save').click(function () {
+    var editorPoints = _editorPoints(containerSelector);
+    if (editorPoints !== undefined) {
+      _saveRound(containerSelector, editorPoints);
+    }
+
+  });
+}
+
+
+
+init('.player1');
+
+</script>
+  
+</body>
+</html>

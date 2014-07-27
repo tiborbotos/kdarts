@@ -82,18 +82,36 @@ function KDarts() {
 		} else {
 			$(containerSelector + ' .points-editor-container').removeClass('has-error');
 		}
+
+		// update out suggestions
+		var outContainer = $(containerSelector + ' .out-suggestions');
+		outContainer.children().remove();
+		var outs = out[(points - editorPoints.points).toString()];
+		if (outs !== undefined && outs.length > 0 && outs[0] !== 'None') {
+
+			$.each(outs, function (i, item) {
+				outContainer.append('<span class="label label-primary">' + item.trim() + '</span>');
+			});
+		}
 	}
 
 	/**
 	 * Formats an editor item into points
 	 * @param  {String} item string representation of an item. Accepted values are numbers
 	 *  between 0-20, 25, 50, and double, treble values as in a format of {[d|t]}{number|[1-20]}
+	 *  AND 'db' as double bull, or 'b' as bull
 	 * @return {Number}      Number value of the shoot or undefined
 	 */
 	function _editorItemToPoints(item) {
 		var convItem = item;
 		var double = false;
 		var treble = false;
+		if (item.length > 0 && item.toUpperCase() == 'B') {
+			return 25;
+		}
+		if (item.length > 0 && item.toUpperCase() == 'DB') {
+			return 50;
+		}
 		if (item.length > 0 && item.toUpperCase().indexOf('T') === 0) {
 			treble = true;
 			convItem = item.substr(1);

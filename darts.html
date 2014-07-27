@@ -6,18 +6,28 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
   <meta charset="utf-8">
-  <title>JS Bin</title>
+  <title>K-Darts</title>
 <style>
-.points-container .point-editor {
-  width: 75%;
-  display: inline-block;
+
+/* points editor */
+.points-editor-container div.input-group span.input-group-addon.gen-points {
+  border-left: 0;
+  border-radius: 4px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  color: #999;
+  width: 3.2em;
 }
-.points-container a {
-  width: 20%;
+.points-editor-container div.input-group a.btn.save {
+  margin-left: 10px;
 }
+
+
 h4.player-name {
   float: left;
 }
+
+/* current points row */
 .current-points {
   font-size: 2em;
   color: rgb(7, 113, 206);
@@ -25,37 +35,37 @@ h4.player-name {
   font-family: monospace;
   }
 .status {
-  margin-top: 1em;
   font-weight: bold;
   font-family: monospace;
 }
-.status {
-  font-size: 1.1em;
-  line-height: 3.1em;
-}
-.avg-label {
+.avg-label, .remaining-label {
   font-weight: normal;
   color: #CCC;
   margin-right: 1em;
+}
+.remaining-label {
+  display: none;
 }
 .avg {
   color: #999;
   width: 4em;
 }
-.gen-points {
-  text-align: right;
-  color: #999;
-  width: 4em;
-}
+
 .point-lists {
   margin-right: 25%
+  font-family: monospace;
 }
 .points {
   width: 4em;
 }
+.shot-list {
+  border-top: 1px solid #CCC;
+  font-family: monospace;
+  font-size: 12px;
+  padding-left: 3em;
+}
 .shot-list > span {
   display: block;
-  text-align: right;
 }
   
 
@@ -73,22 +83,25 @@ h4.player-name {
               <h4 class="player-name">Randall</h4>
               <span class="current-points pull-right">301</span>
             </div>
-            <div class="form-group_ points-container">
-              <div class="input-group_">
-                <!--div class="input-group-addon"></div-->
-                <input type="text" class="form-control point-editor" placeholder="Enter points">
-                <a class="save btn btn-success pull-right">Save</a>
+            <form class="">
+              <div class="form-group points-editor-container">
+                <div class="input-group">
+                  <input type="text" class="form-control point-editor" placeholder="Enter points">
+                  <span class="input-group-addon gen-points"></span>
+                  <a class="save btn btn-success pull-right">Save</a>
+                </div>
               </div>
-            </div>
+            </form>
             
             <div class="point-lists">
               <div class="status clearfix">
                 <span class="avg-label pull-left clearfix">avg</span>
                 <span class="avg pull-left clearfix"></span>
-                <span class="gen-points pull-right clearfix"></span>
+                <span class="remaining-points pull-right clearfix"></span>
+                <span class="remaining-label pull-right clearfix">rem</span>
               </div>
 
-              <div class="shot-list pull-right">
+              <div class="shot-list">
                 <!--span><a href="#">301<span class="glyphicon glyphicon-remove-circle"></span></a></span>
                 <span>87</span-->
               </div>
@@ -104,14 +117,12 @@ h4.player-name {
 <script>
   
   
-  
-function getCurrentPoints(containerSelector) {
-  var currentPoints = $(containerSelector + ' .current-points').text();
-  if (currentPoints === '') {
-    currentPoints = 301;
-  }
-}
-
+/**
+ * Formats an editor item into points
+ * @param  {String} item string representation of an item. Accepted values are numbers
+ *  between 0-20, 25, 50, and double, treble values as in a format of {[d|t]}{number|[1-20]}
+ * @return {Number}      Number value of the shoot or undefined
+ */
 function _editorItemToPoints(item) {
   var convItem = item;
   var double = false;
@@ -124,17 +135,26 @@ function _editorItemToPoints(item) {
     double = true;
     convItem = item.substr(1);
   }
-  var p = Number(convItem);
-  if (!isNaN(p)) {
+  var shoot = Number(convItem);
+  if (!isNaN(shoot)) {
+    if (shoot < 0 ||
+       (shoot > 20 && shoot != 25 && shoot != 50)) {
+      return undefined;
+    }
+
     if (treble) {
-      return p * 3;
+      return shoot * 3;
     }
     if (double) {
-      return p * 2;
+      return shoot * 2;
     }
-    return p;
+    return shoot;
   }
-  return 0;
+  // if it starts with t or d we don't want to look like an error
+  if (treble || double) {
+    return 0;
+  }
+  return undefined;
 }
 
 /**
@@ -145,34 +165,57 @@ function _editorItemToPoints(item) {
  *    points: // sum of the points
  *    darts: // array of points of darts
  *    rawshots: // string representation
+ *    invalid: // boolean, marking that the editor contains invalid value
+ *    empty: // boolean, marking that the editor is empty
  *  }
  */
-function _editorPoints(containerSelector) {
+function _editorPoints() {
   var pointEditor = $(containerSelector + ' .point-editor');
   var genPoints = $(containerSelector + ' .gen-points');
 
-  var value = pointEditor.val();
+  const invalid = {invalid: true, empty: false};
+  const empty = {invalid: false, empty: true};
+
+  var value = pointEditor.val().trim();
   var darts = [];
   var dartsStr = value.split(' ');
-  
-  // convert dartsStr into darts[]
+
+  // convert and check dartsStr into darts[]
+  var hasInvalid = false;
   $.each(dartsStr,function (i, item) {
     var dartPoint = _editorItemToPoints(item);
+    if (dartPoint === undefined) {
+      hasInvalid = true;
+    }
     darts.push(dartPoint);
   });
+  if (hasInvalid) {
+    return invalid;
+  }
   
-  if (darts.length > 0) {
+
+  if (darts.length > 0 && darts.length <= 3) {
+    var points = darts.reduce(function (l,r) { return l + r;});
+    if (points > 180) {
+      return invalid;
+    }
     return {
-      points: darts.reduce(function (l,r) { return l + r;}),
+      points: points,
       darts: darts,
-      rawshots: dartsStr
+      rawshots: dartsStr,
+      invalid: false,
+      empty: false,
     };
   } else {
-    return undefined;
+    if (darts.length == 0) {
+      return empty;  
+    } else if (darts.length > 3) {
+      return invalid;
+    }
   }
 }
 
-function _saveRound(containerSelector, editorPoints) {
+function _saveRound(editorPoints) {
   // save points
   points -= editorPoints.points;
   shots.push(editorPoints);
@@ -187,35 +230,73 @@ function _saveRound(containerSelector, editorPoints) {
   // cleanup
   $(containerSelector + ' .point-editor').val('');
   $(containerSelector + ' .gen-points').text('');
+  $(containerSelector + ' .remaining-points').text(''); 
+  $(containerSelector + ' .remaining-label').hide();
+}
+
+function _genPoints(editorPoints) {
+  // updating remaining and generated points
+  if (!editorPoints.empty) {
+    $(containerSelector + ' .gen-points').text(editorPoints.points);
+
+    if (points - editorPoints.points < 180) {
+      $(containerSelector + ' .remaining-label').show();
+      $(containerSelector + ' .remaining-points').text(points - editorPoints.points); 
+    } else {
+      $(containerSelector + ' .remaining-label').hide();
+      $(containerSelector + ' .remaining-points').text(''); 
+    }
+
+  } else {
+    $(containerSelector + ' .gen-points').text('');
+    $(containerSelector + ' .remaining-points').text(''); 
+    $(containerSelector + ' .remaining-label').hide();
+  }
+
+  // handling errors
+  if (editorPoints.invalid) {
+    $(containerSelector + ' .points-editor-container').addClass('has-error');
+  } else {
+    $(containerSelector + ' .points-editor-container').removeClass('has-error');
+  }
 }
 
 var X01 = 301;
 var points = X01;
 var shots = [];
+var containerSelector;
 
-function init(containerSelector) {
-  // realtime update
-  $(containerSelector + ' .point-editor').keyup(function () {
-    var editorPoints =_editorPoints(containerSelector);
-    if (editorPoints !== undefined) {
-      $(containerSelector + ' .gen-points').text(editorPoints.points);
-    } else {
-      $(containerSelector + ' .gen-points').text('');
+/**
+ * Generates the current state of the points, updates the remaining points
+ */
+function genPoints() {
+  var editorPoints =_editorPoints();
+  _genPoints(editorPoints);
+}
+
+/**
+ * Saves the points from the editor
+ */
+function savePoints() {
+  var editorPoints = _editorPoints();
+  if (!editorPoints.empty && !editorPoints.invalid) {
+    _saveRound(editorPoints);
+  }
+}
+
+function init() {
+  $(containerSelector + ' .point-editor').keyup(genPoints);
+  $(containerSelector + ' .save').click(savePoints);
+  $(containerSelector).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      savePoints();
+      return false;
     }
-  });
-
-  // save points
-  $(containerSelector + ' .save').click(function () {
-    var editorPoints = _editorPoints(containerSelector);
-    if (editorPoints !== undefined) {
-      _saveRound(containerSelector, editorPoints);
-    }
-
   });
 }
 
-
-
+containerSelector = '.player1';
 init('.player1');
 
 </script>

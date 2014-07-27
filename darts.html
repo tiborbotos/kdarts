@@ -5,11 +5,15 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script src="darts.js"></script>
   <meta charset="utf-8">
   <title>K-Darts</title>
 <style>
 
 /* points editor */
+.points-editor-container div.input-group {
+  width: 100%;
+}
 .points-editor-container div.input-group span.input-group-addon.gen-points {
   border-left: 0;
   border-radius: 4px;
@@ -76,6 +80,8 @@ h4.player-name {
   <div class="container">
     <p></p>
     <div class="row">
+
+      <!-- KDARTS TEMPLATE -->
       <div class="col-xs-6 col-sm-6 col-md-6">
         <div class="well">
           <div class="player1">
@@ -101,203 +107,54 @@ h4.player-name {
                 <span class="remaining-label pull-right clearfix">rem</span>
               </div>
 
-              <div class="shot-list">
-                <!--span><a href="#">301<span class="glyphicon glyphicon-remove-circle"></span></a></span>
-                <span>87</span-->
-              </div>
+              <div class="shot-list"></div>
             </div>
-            <div class="clearfix"></div>
           </div>
         </div>
       </div>
+
+      <!-- KDARTS TEMPLATE -->
+      <div class="col-xs-6 col-sm-6 col-md-6">
+        <div class="well">
+          <div class="player2">
+            <div class="clearfix">
+              <h4 class="player-name">Kugli</h4>
+              <span class="current-points pull-right">301</span>
+            </div>
+            <form class="">
+              <div class="form-group points-editor-container">
+                <div class="input-group">
+                  <input type="text" class="form-control point-editor" placeholder="Enter points">
+                  <span class="input-group-addon gen-points"></span>
+                  <a class="save btn btn-success pull-right">Save</a>
+                </div>
+              </div>
+            </form>
+            
+            <div class="point-lists">
+              <div class="status clearfix">
+                <span class="avg-label pull-left clearfix">avg</span>
+                <span class="avg pull-left clearfix"></span>
+                <span class="remaining-points pull-right clearfix"></span>
+                <span class="remaining-label pull-right clearfix">rem</span>
+              </div>
+
+              <div class="shot-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       
     </div>
   </div>
   
 <script>
-  
-  
-/**
- * Formats an editor item into points
- * @param  {String} item string representation of an item. Accepted values are numbers
- *  between 0-20, 25, 50, and double, treble values as in a format of {[d|t]}{number|[1-20]}
- * @return {Number}      Number value of the shoot or undefined
- */
-function _editorItemToPoints(item) {
-  var convItem = item;
-  var double = false;
-  var treble = false;
-  if (item.length > 0 && item.toUpperCase().indexOf('T') === 0) {
-    treble = true;
-    convItem = item.substr(1);
-  }
-  if (item.length > 0 && item.toUpperCase().indexOf('D') === 0) {
-    double = true;
-    convItem = item.substr(1);
-  }
-  var shoot = Number(convItem);
-  if (!isNaN(shoot)) {
-    if (shoot < 0 ||
-       (shoot > 20 && shoot != 25 && shoot != 50)) {
-      return undefined;
-    }
+var player1 = new KDarts();
+player1.init('.player1');
 
-    if (treble) {
-      return shoot * 3;
-    }
-    if (double) {
-      return shoot * 2;
-    }
-    return shoot;
-  }
-  // if it starts with t or d we don't want to look like an error
-  if (treble || double) {
-    return 0;
-  }
-  return undefined;
-}
-
-/**
- * Converts editor into points
- * @param  {String} containerSelector jquery selector
- * @return {Object} 
- *  {
- *    points: // sum of the points
- *    darts: // array of points of darts
- *    rawshots: // string representation
- *    invalid: // boolean, marking that the editor contains invalid value
- *    empty: // boolean, marking that the editor is empty
- *  }
- */
-function _editorPoints() {
-  var pointEditor = $(containerSelector + ' .point-editor');
-  var genPoints = $(containerSelector + ' .gen-points');
-
-  const invalid = {invalid: true, empty: false};
-  const empty = {invalid: false, empty: true};
-
-  var value = pointEditor.val().trim();
-  var darts = [];
-  var dartsStr = value.split(' ');
-
-  // convert and check dartsStr into darts[]
-  var hasInvalid = false;
-  $.each(dartsStr,function (i, item) {
-    var dartPoint = _editorItemToPoints(item);
-    if (dartPoint === undefined) {
-      hasInvalid = true;
-    }
-    darts.push(dartPoint);
-  });
-  if (hasInvalid) {
-    return invalid;
-  }
-  
-
-  if (darts.length > 0 && darts.length <= 3) {
-    var points = darts.reduce(function (l,r) { return l + r;});
-    if (points > 180) {
-      return invalid;
-    }
-    return {
-      points: points,
-      darts: darts,
-      rawshots: dartsStr,
-      invalid: false,
-      empty: false,
-    };
-  } else {
-    if (darts.length == 0) {
-      return empty;  
-    } else if (darts.length > 3) {
-      return invalid;
-    }
-  }
-}
-
-function _saveRound(editorPoints) {
-  // save points
-  points -= editorPoints.points;
-  shots.push(editorPoints);
-  $(containerSelector + ' .current-points').text(points);
-  $(containerSelector + ' .shot-list').append('<span title="' + editorPoints.rawshots + '">' + points + '</span>');
-
-  // calc avg
-  var sum = X01 - points;
-  var avg = Math.round(sum / shots.length);
-  $(containerSelector + ' .avg').text(avg);
-
-  // cleanup
-  $(containerSelector + ' .point-editor').val('');
-  $(containerSelector + ' .gen-points').text('');
-  $(containerSelector + ' .remaining-points').text(''); 
-  $(containerSelector + ' .remaining-label').hide();
-}
-
-function _genPoints(editorPoints) {
-  // updating remaining and generated points
-  if (!editorPoints.empty) {
-    $(containerSelector + ' .gen-points').text(editorPoints.points);
-
-    if (points - editorPoints.points < 180) {
-      $(containerSelector + ' .remaining-label').show();
-      $(containerSelector + ' .remaining-points').text(points - editorPoints.points); 
-    } else {
-      $(containerSelector + ' .remaining-label').hide();
-      $(containerSelector + ' .remaining-points').text(''); 
-    }
-
-  } else {
-    $(containerSelector + ' .gen-points').text('');
-    $(containerSelector + ' .remaining-points').text(''); 
-    $(containerSelector + ' .remaining-label').hide();
-  }
-
-  // handling errors
-  if (editorPoints.invalid) {
-    $(containerSelector + ' .points-editor-container').addClass('has-error');
-  } else {
-    $(containerSelector + ' .points-editor-container').removeClass('has-error');
-  }
-}
-
-var X01 = 301;
-var points = X01;
-var shots = [];
-var containerSelector;
-
-/**
- * Generates the current state of the points, updates the remaining points
- */
-function genPoints() {
-  var editorPoints =_editorPoints();
-  _genPoints(editorPoints);
-}
-
-/**
- * Saves the points from the editor
- */
-function savePoints() {
-  var editorPoints = _editorPoints();
-  if (!editorPoints.empty && !editorPoints.invalid) {
-    _saveRound(editorPoints);
-  }
-}
-
-function init() {
-  $(containerSelector + ' .point-editor').keyup(genPoints);
-  $(containerSelector + ' .save').click(savePoints);
-  $(containerSelector).keydown(function(event){
-    if(event.keyCode == 13) {
-      event.preventDefault();
-      savePoints();
-      return false;
-    }
-  });
-}
-
-containerSelector = '.player1';
-init('.player1');
+var player2 = new KDarts();
+player2.init('.player2');
 
 </script>
   

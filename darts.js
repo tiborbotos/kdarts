@@ -5,9 +5,13 @@ function KDarts() {
 	var shots = [];
 	var containerSelector;
 
-	this.init = function (container) {
-		containerSelector = container;
+	var saveDartsCallback;
 
+	this.init = function (playerName, container, dartsCallback) {
+		containerSelector = container;
+		saveDartsCallback = dartsCallback;
+
+		$(containerSelector + ' .player-name').text(playerName);
 		$(containerSelector + ' .point-editor').keyup(genPoints);
 		$(containerSelector + ' .save').click(savePoints);
 		$(containerSelector).keydown(function(event){
@@ -34,12 +38,16 @@ function KDarts() {
 		var editorPoints = _editorPoints();
 		if (!editorPoints.empty && !editorPoints.invalid) {
 			saveAndUpdatePoints(editorPoints);
+			saveDartsCallback(containerSelector, points);
 		}
 	}
 
 
 	function saveAndUpdatePoints(editorPoints) {
 		// save points
+		if (points - editorPoints.points <= 1 && (points - editorPoints.points !== 0)) {
+			editorPoints.points = 0; // wasted
+		}
 		points -= editorPoints.points;
 		shots.push(editorPoints);
 		$(containerSelector + ' .current-points').text(points);

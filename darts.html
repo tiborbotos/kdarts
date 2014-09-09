@@ -11,6 +11,9 @@
   <title>K-Darts</title>
 <style>
 
+body {
+  background: url(family-dart-game_list.jpg) no-repeat center fixed;
+}
 .x01-darts {
   height: 320px;
 }
@@ -121,7 +124,7 @@ h4.player-name {
               <div class="btn-group">
                 <button id="gameType301" type="button" class="btn btn-default active game-type-btn" data-id="301">301</button>
                 <button id="gameType501" type="button" class="btn btn-default game-type-btn" data-id="501">501</button>
-                <button id="gameType901" type="button" class="btn btn-default game-type-btn" data-id="901">901</button>
+                <button id="gameType1001" type="button" class="btn btn-default game-type-btn" data-id="1001">1001</button>
               </div>
             </div>
           </div>
@@ -194,7 +197,7 @@ var playerCountClicked = function(event) {
 var gameTypeClicked = function(event) {
   $('#gameType301').removeClass('active');
   $('#gameType501').removeClass('active');
-  $('#gameType901').removeClass('active');
+  $('#gameType1001').removeClass('active');
   gameType = Number($(this).attr('data-id'));
   $(this).addClass('active');
 };

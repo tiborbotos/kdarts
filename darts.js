@@ -12,6 +12,7 @@ function KDarts(X01) {
 		saveDartsCallback = dartsCallback;
 
 		$(containerSelector + ' .player-name').text(playerName);
+		$(containerSelector + ' .current-points').text(points);
 		$(containerSelector + ' .point-editor').keyup(genPoints);
 		$(containerSelector + ' .save').click(savePoints);
 		$(containerSelector).keydown(function(event){

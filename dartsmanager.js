@@ -19,7 +19,13 @@ function startGame(playerCount, game) {
 		players.push(p);
 		i += 1;
 	}
-	console.log('players ', players);
+
+	// set names
+	$.each(players, function(i, item) {
+		if ($('.player-name-' + (i + 1)).val() !== '') {
+			item.name = $('.player-name-' + (i + 1)).val();
+		}
+	});
 
 	var activePlayerInd = 0;
 	var onSaveDarts = function (container, points) {
@@ -65,4 +71,15 @@ function startGame(playerCount, game) {
 
 	start();
 	next();
+}
+
+function randomNames() {
+	var nameHell = ['Randall', 'Kugli', 'Bumi', 'Plaplap', 'Uxi', 'Saxi', 'Jockey', 'Ubul', 'Lukas'];
+	var res = [];
+	while (res.length < 4) {
+		var cut = Math.ceil( Math.random() * nameHell.length - 1);
+		res.push(nameHell[cut]);
+		nameHell = nameHell.slice(0, cut).concat(nameHell.slice(cut + 1));
+	}
+	return res;
 }

@@ -255,7 +255,12 @@ var gameTypeClicked = function(event) {
 // initialize event handlers and the game
 $('.game-type-btn').click(gameTypeClicked);
 $('.player-count-btn').click(playerCountClicked);
-$('.player-name-editor-btn').click(function () { $('.player-name-editor').toggle(200); })
+$('.player-name-editor-btn').click(function () {
+  if ($('.player-name-editor:visible').length === 0)
+    $('.player-name-editor').show(200); 
+  else
+    $('.player-name-editor').hide(200); 
+})
 
 $('#startgame').click(function(evt) {
   $('.row.manager').hide(250);

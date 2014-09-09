@@ -11,6 +11,12 @@
   <title>K-Darts</title>
 <style>
 
+.x01-darts {
+  height: 320px;
+}
+.active-player {
+  box-shadow: 5px 2px 10px rgba(6, 79, 158, 0.6);
+}
 /* points editor */
 .points-editor-container div.input-group {
   width: 100%;
@@ -43,45 +49,50 @@ h4.player-name {
   font-weight: bold;
   font-family: monospace;
   }
-.status {
+.point-lists-stats .status {
   font-weight: bold;
   font-family: monospace;
 }
-.avg-label, .remaining-label {
+.point-lists-stats .avg-label, .remaining-label {
   font-weight: normal;
   color: #CCC;
   margin-right: 1em;
 }
-.remaining-label {
+.point-lists-stats .remaining-label {
   display: none;
 }
-.avg {
+.point-lists-stats .avg {
   color: #999;
   width: 4em;
 }
-.out-suggestions > .label {
+.point-lists-stats .out-suggestions > .label {
   margin-right: 10px;
   font-size: 1em;
   font-family: sans-serif;
   font-weight: normal;
 }
-.point-lists {
+.point-lists-stats {
   margin-right: 25%
   font-family: monospace;
-}
-.points {
-  width: 4em;
 }
 .shot-list {
   border-top: 1px solid #CCC;
   font-family: monospace;
   font-size: 12px;
   padding-left: 3em;
+  height: 150px;
+  overflow-y: auto;
 }
 .shot-list > span {
   display: block;
 }
   
+
+/* game manager */
+.game {
+  display: none;
+}
+
 
 </style>
 </head>
@@ -89,12 +100,47 @@ h4.player-name {
 
   <div class="container">
     <p></p>
-    <div class="row">
+    
+    <div class="row manager">
+      <div class="col-md-4 col-md-offset-4">
+        <div class="well well-lg">
+          <div class="player-count">
+            <h2>Players</h2>
+            <div class="btn-toolbar" role="toolbar">
+              <div class="btn-group">
+                <button id="playerCount2" type="button" class="btn btn-default active player-count-btn" data-id="2">2</button>
+                <button id="playerCount3" type="button" class="btn btn-default player-count-btn" data-id="3">3</button>
+                <button id="playerCount4" type="button" class="btn btn-default player-count-btn" data-id="4">4</button>
+              </div>
+            </div>
+          </div>
 
-      <!-- KDARTS TEMPLATE -->
-      <div class="col-xs-6 col-sm-6 col-md-6">
+          <div class="player-count">
+            <h2>Game</h2>
+            <div class="btn-toolbar" role="toolbar">
+              <div class="btn-group">
+                <button id="gameType301" type="button" class="btn btn-default active game-type-btn" data-id="301">301</button>
+                <button id="gameType501" type="button" class="btn btn-default game-type-btn" data-id="501">501</button>
+                <button id="gameType901" type="button" class="btn btn-default game-type-btn" data-id="901">901</button>
+              </div>
+            </div>
+          </div>
+
+          <div class=" clearfix">
+            <span class="pull-right">
+              <button id="startgame" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> start</button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row game">
+
+      <!-- X01 DARTS GAME TEMPLATE -->
+      <div class="col-xs-6 col-sm-6 col-md-6 x01-darts-tml">
         <div class="well">
-          <div class="player1">
+          <div class="player-number">
             <div class="clearfix">
               <h4 class="player-name">Randall</h4>
               <span class="current-points pull-right">301</span>
@@ -109,7 +155,7 @@ h4.player-name {
               </div>
             </form>
             
-            <div class="point-lists">
+            <div class="point-lists-stats">
               <div class="status clearfix">
                 <span class="avg-label pull-left clearfix">avg</span>
                 <span class="avg pull-left clearfix"></span>
@@ -124,52 +170,45 @@ h4.player-name {
         </div>
       </div>
 
-      <!-- KDARTS TEMPLATE -->
-      <div class="col-xs-6 col-sm-6 col-md-6">
-        <div class="well">
-          <div class="player2">
-            <div class="clearfix">
-              <h4 class="player-name">Kugli</h4>
-              <span class="current-points pull-right">301</span>
-            </div>
-            <form class="">
-              <div class="form-group points-editor-container">
-                <div class="input-group">
-                  <input type="text" class="form-control point-editor" placeholder="Enter points">
-                  <span class="input-group-addon gen-points"></span>
-                  <a class="save btn btn-success pull-right">Save</a>
-                </div>
-              </div>
-            </form>
-            
-            <div class="point-lists">
-              <div class="status clearfix">
-                <span class="avg-label pull-left clearfix">avg</span>
-                <span class="avg pull-left clearfix"></span>
-                <span class="remaining-points pull-right clearfix"></span>
-                <span class="remaining-label pull-right clearfix">rem</span>
-                <span class="out-suggestions pull-right"></span>                
-              </div>
-
-              <div class="shot-list"></div>
-            </div>
-          </div>
-        </div>
-      </div>
       
       
     </div>
   </div>
-  
-<script>
-/*var player1 = new KDarts();
-player1.init('.player1');
 
-var player2 = new KDarts();
-player2.init('.player2');
-*/
-</script>
 <script src="dartsmanager.js"></script>
-  
+<script>
+// default playercount and game type
+var playerCount = 2;
+var gameType = 301;
+
+// event handler for player count
+var playerCountClicked = function(event) {
+  $('#playerCount2').removeClass('active');
+  $('#playerCount3').removeClass('active');
+  $('#playerCount4').removeClass('active');
+  playerCount = Number($(this).attr('data-id'));
+  $(this).addClass('active');
+};
+
+// event handler for game type selector
+var gameTypeClicked = function(event) {
+  $('#gameType301').removeClass('active');
+  $('#gameType501').removeClass('active');
+  $('#gameType901').removeClass('active');
+  gameType = Number($(this).attr('data-id'));
+  $(this).addClass('active');
+};
+
+// initialize event handlers and the game
+$('.game-type-btn').click(gameTypeClicked);
+$('.player-count-btn').click(playerCountClicked);
+
+$('#startgame').click(function(evt) {
+  $('.row.manager').hide(250);
+  $('.row.game').show(350);
+  startGame(playerCount, gameType);
+});
+
+</script>
 </body>
 </html>

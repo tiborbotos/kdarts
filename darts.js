@@ -1,6 +1,6 @@
-function KDarts() {
+function KDarts(X01) {
 
-	var X01 = 301;
+	//var X01 = 301;
 	var points = X01;
 	var shots = [];
 	var containerSelector;

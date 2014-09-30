@@ -6,10 +6,14 @@ function KDarts(X01) {
 	var containerSelector;
 
 	var saveDartsCallback;
+	var player = null;
+	var gameId = null;
 
 	this.init = function (playerName, container, dartsCallback) {
 		containerSelector = container;
 		saveDartsCallback = dartsCallback;
+		player = playerName;
+		gameId = X01 + '_' + Math.round(Math.random()* 9999) + '_' + ((new Date()).toISOString());
 
 		$(containerSelector + ' .player-name').text(playerName);
 		$(containerSelector + ' .current-points').text(points);
@@ -50,6 +54,10 @@ function KDarts(X01) {
 			editorPoints.points = 0; // wasted
 		}
 		points -= editorPoints.points;
+		while (editorPoints.darts.length < 3) {
+			editorPoints.darts.push(0);
+			editorPoints.rawshots.push('0');
+		}
 		shots.push(editorPoints);
 		$(containerSelector + ' .current-points').text(points);
 		$(containerSelector + ' .shot-list').append('<span title="' + editorPoints.rawshots + '">' + points + '</span>');
@@ -58,6 +66,15 @@ function KDarts(X01) {
 		var sum = X01 - points;
 		var avg = Math.round(sum / shots.length);
 		$(containerSelector + ' .avg').text(avg);
+
+		// save user stat
+		var playerStat = localStorage['player'];
+		if (playerStat === undefined) {
+			playerStat = {};
+			playerStat[gameId] = {shots: []};
+		}
+		playerStat[gameId].shots.push(editorPoints);
+		localStorage.setItem(player, playerStat);
 
 		// cleanup
 		$(containerSelector + ' .point-editor').val('');
@@ -96,7 +113,7 @@ function KDarts(X01) {
 		var outContainer = $(containerSelector + ' .out-suggestions');
 		outContainer.children().remove();
 		var outs = out[(points - editorPoints.points).toString()];
-		if (outs !== undefined && outs.length > 0 && outs[0] !== 'None') {
+		if (outs !== undefined && outs.length > 0 && outs[0] !== 'None' && outs.length <= (3 - editorPoints.darts.length)) {
 
 			$.each(outs, function (i, item) {
 				outContainer.append('<span class="label label-primary">' + item.trim() + '</span>');
@@ -134,22 +151,22 @@ function KDarts(X01) {
 			if (shoot < 0 ||
 				(shoot > 20 && shoot != 25 && shoot != 50)) {
 				return undefined;
-		}
+			}
 
-		if (treble) {
-			return shoot * 3;
+			if (treble) {
+				return shoot * 3;
+			}
+			if (double) {
+				return shoot * 2;
+			}
+			return shoot;
 		}
-		if (double) {
-			return shoot * 2;
+		// if it starts with t or d we don't want to look like an error
+		if (treble || double) {
+			return 0;
 		}
-		return shoot;
+		return undefined;
 	}
-	// if it starts with t or d we don't want to look like an error
-	if (treble || double) {
-		return 0;
-	}
-	return undefined;
-}
 
 	/**
 	 * Converts editor into points

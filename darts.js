@@ -32,7 +32,7 @@ function KDarts(X01) {
 	 * Generates the current state of the points, updates the remaining points
 	 */
 	function genPoints() {
-		var editorPoints =_editorPoints();
+		var editorPoints = _editorPoints();
 		updateGenAndRemainginPosts(editorPoints);
 	}
 
@@ -113,10 +113,13 @@ function KDarts(X01) {
 		var outContainer = $(containerSelector + ' .out-suggestions');
 		outContainer.children().remove();
 		var outs = out[(points - editorPoints.points).toString()];
-		if (outs !== undefined && outs.length > 0 && outs[0] !== 'None' && outs.length <= (3 - editorPoints.darts.length)) {
+		if (outs !== undefined &&
+			outs.length > 0 &&
+			outs[0] !== 'None') {
 
+			var impossible = outs.length > (3 - editorPoints.darts.length);
 			$.each(outs, function (i, item) {
-				outContainer.append('<span class="label label-primary">' + item.trim() + '</span>');
+				outContainer.append('<span class="label label-primary' + (impossible ? ' label-warning' : '') + '">' + item.trim() + '</span>');
 			});
 		}
 	}
@@ -146,10 +149,13 @@ function KDarts(X01) {
 			double = true;
 			convItem = item.substr(1);
 		}
-		var shoot = Number(convItem);
+		var shoot = Number(convItem || NaN); // if it's an empty string, lets have it -1
 		if (!isNaN(shoot)) {
 			if (shoot < 0 ||
 				(shoot > 20 && shoot != 25 && shoot != 50)) {
+				return undefined;
+			}
+			if ((treble || double) && (shoot === 25 || shoot === 50)) {
 				return undefined;
 			}
 
@@ -161,9 +167,9 @@ function KDarts(X01) {
 			}
 			return shoot;
 		}
-		// if it starts with t or d we don't want to look like an error
+		// if it starts with t or d we don't want to look like an error, but it's not a valid shoot
 		if (treble || double) {
-			return 0;
+			return -1;
 		}
 		return undefined;
 	}
@@ -184,28 +190,29 @@ function KDarts(X01) {
 		var pointEditor = $(containerSelector + ' .point-editor');
 		var genPoints = $(containerSelector + ' .gen-points');
 
-		var invalid = {invalid: true, empty: false};
-		var empty = {invalid: false, empty: true};
+		var invalid = {invalid: true, empty: false, points: 0};
+		var empty = {invalid: false, empty: true, points: 0, darts: []};
 
 		var value = pointEditor.val().trim();
 		var darts = [];
-		var dartsStr = value.split(' ');
+		var dartsStr = value.length > 0 ? value.split(' ') : [];
 
 		// convert and check dartsStr into darts[]
 		var hasInvalid = false;
-		$.each(dartsStr,function (i, item) {
+		$.each(dartsStr, function (i, item) {
 			var dartPoint = _editorItemToPoints(item);
 			if (dartPoint === undefined) {
 				hasInvalid = true;
+			} else if (dartPoint >= 0) {
+				darts.push(dartPoint);
 			}
-			darts.push(dartPoint);
 		});
 		if (hasInvalid) {
 			return invalid;
 		}
 
 
-		if (darts.length > 0 && darts.length <= 3) {
+		if (value !== '' && darts.length > 0 && darts.length <= 3) {
 			var points = darts.reduce(function (l,r) { return l + r;});
 			if (points > 180) {
 				return invalid;

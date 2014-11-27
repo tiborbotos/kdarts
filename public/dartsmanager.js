@@ -5,6 +5,8 @@ function startGame(playerCount, game) {
 	var x01Template = $('.x01-darts-tml');
 	var gameContainer = $('.row.game');
 
+	//var playerStats = {};
+
 	// create player containers
 	while (i < playerCount) {
 		var selector = 'd-player' + (i + 1).toString();
@@ -28,7 +30,16 @@ function startGame(playerCount, game) {
 	});
 
 	var activePlayerInd = 0;
-	var onSaveDarts = function (container, points) {
+	var onSaveDarts = function (container, points, editorPoints) {
+		// save stats
+		/*if (!playerStats[name]) {
+			playerStats[name] = { darts: [], wasted: 0 };
+		}
+		var playerStat = playerStats[name];
+		if (!editorPoints.wasted) {
+		} else {
+		}*/
+
 		if (points === 0) {
 			alert(players[activePlayerInd].name + ' WON!');
 			activePlayerInd = -1;

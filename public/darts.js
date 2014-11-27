@@ -43,15 +43,15 @@ function KDarts(X01) {
 		var editorPoints = _editorPoints();
 		if (!editorPoints.empty && !editorPoints.invalid) {
 			saveAndUpdatePoints(editorPoints);
-			saveDartsCallback(containerSelector, points);
+			saveDartsCallback(containerSelector, points, editorPoints);
 		}
 	}
-
 
 	function saveAndUpdatePoints(editorPoints) {
 		// save points
 		if (points - editorPoints.points <= 1 && (points - editorPoints.points !== 0)) {
 			editorPoints.points = 0; // wasted
+			editorPoints.wasted = true;
 		}
 		points -= editorPoints.points;
 		while (editorPoints.darts.length < 3) {

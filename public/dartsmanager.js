@@ -1,73 +1,138 @@
-function startGame(playerCount, game) {
+var dartsManager = {
 
-	var i = 0;
-	var players = [];
-	var x01Template = $('.x01-darts-tml');
-	var gameContainer = $('.row.game');
+	players: [],
+	activePlayerInd: 0,
+	timer: null,
+	gameStarted: null,
+	inGame: false,
 
-	//var playerStats = {};
+	_createPlayers: function (playerCount) {
+		var i = 0,
+			x01Template = $('.x01-darts-tml'),
+			gameContainer = $('.row.game');
 
-	// create player containers
-	while (i < playerCount) {
-		var selector = 'd-player' + (i + 1).toString();
-		var p = {
-				name: 'Player' + (i + 1).toString(),
-				container: '.' + selector
-			};
-		
-		var playerTml = x01Template.clone().removeClass('x01-darts-tml').addClass('x01-darts');
-		playerTml.find('>div').addClass(selector);
-		gameContainer.append(playerTml);
-		players.push(p);
-		i += 1;
-	}
-
-	// set names
-	$.each(players, function(i, item) {
-		if ($('.player-name-' + (i + 1)).val() !== '') {
-			item.name = $('.player-name-' + (i + 1)).val();
-		}
-	});
-
-	var activePlayerInd = 0;
-	var onSaveDarts = function (container, points, editorPoints) {
-		// save stats
-		/*if (!playerStats[name]) {
-			playerStats[name] = { darts: [], wasted: 0 };
-		}
-		var playerStat = playerStats[name];
-		if (!editorPoints.wasted) {
-		} else {
-		}*/
-
-		if (points === 0) {
-			alert(players[activePlayerInd].name + ' WON!');
-			activePlayerInd = -1;
-			next();
+		// create player containers
+		$('.x01-darts-tml').show();
+		while (i < playerCount) {
+			var selector = 'd-player' + (i + 1).toString();
+			var p = {
+					name: 'Player' + (i + 1).toString(),
+					container: '.' + selector
+				};
+			
+			var playerTml = x01Template.clone().removeClass('x01-darts-tml').addClass('x01-darts');
+			playerTml.find('>div').addClass(selector).parent().addClass('dart-player-instance');
+			gameContainer.append(playerTml);
+			this.players.push(p);
+			i += 1;
 		}
 
-		if (activePlayerInd < players.length - 1) {
-			activePlayerInd += 1;
-		} else {
-			activePlayerInd = 0;
-		}
-
-		next();
-	};
-
-	function start() {
-		x01Template.hide();
-		$.each(players, function(i, item) {
-			console.log('init player ', item);
-			var player = new KDarts(game);
-			player.init(item.name, item.container, onSaveDarts);
+		// set names
+		$.each(this.players, function(i, item) {
+			if ($('.player-name-' + (i + 1)).val() !== '') {
+				item.name = $('.player-name-' + (i + 1)).val();
+			}
 		});
-	}
+	},
 
-	function next() {
-		$.each(players, function(i, item) {
+	_setNames: function () {
+		$.each(this.players, function(i, item) {
+			if ($('.player-name-' + (i + 1)).val() !== '') {
+				item.name = $('.player-name-' + (i + 1)).val();
+			}
+		});
+	},
+
+	_zeroEx: function (n) {
+		if (n > 0) {
+			if (n < 10) {
+				return '0' + n;
+			} else {
+				return n.toString();
+			}
+		} else {
+			return '00';
+		}
+	},
+
+	_start: function (game) {
+		var self = this;
+		this.gameStarted = Math.floor((new Date()).getTime() / 1000);
+
+		this.activePlayerInd = 0;
+		this.inGame = true;
+		$('.x01-darts-tml').hide();
+		$.each(this.players, function(i, item) {
+			console.log('init player ', item);
+			item.player = new KDarts(game);
+			item.player.init(item.name, item.container, self.onSaveDarts, self);
+		});
+		$('.game-info').text('KDarts ' + game);
+		$('.js_welcome-navbar').hide();
+		$('.js_x01-navbar').show();
+		this._initTimer();
+	},
+
+	_initTimer: function () {
+		var self = this;
+		$('.js_timer').text('00:00').show();
+		this.timer = setInterval(function () {
+			var now = Math.floor((new Date()).getTime() / 1000),
+				elapsed = now - self.gameStarted,
+				elapsedMins = Math.floor(elapsed / 60),
+				elapsedSec = elapsed - (elapsedMins * 60),
+				elapsedT = self._zeroEx(elapsedMins) + ':' + self._zeroEx(elapsedSec);
+			$('.js_timer').text(elapsedT);
+		}, 1000);
+	},
+
+	winner: function (player) {
+		clearInterval(this.timer);
+
+		$('.js_winner-navbar').show();
+		var self = this;
+		$('.js_winner-navbar .name').text(player.name + ' won!');
+		$('#playagain').click(function () {
+			$.each(self.players, function (i, item) {
+				item.player.reset();
+			});
+			self.activePlayerInd = 0;
+			self._initTimer();
+			$('.js_winner-navbar').hide();
+			self.next();
+		});
+		
+		$('#closeplay').click(function () {
+			$('.row.game .dart-player-instance').remove();
+			$('.row.game').hide(350);
+			$('.row.manager').show(250);
+			$('.js_winner-navbar').hide();
+			$('.js_x01-navbar').hide();
+			$('.js_welcome-navbar').show();
+			self.inGame = false;
+		});
+	},
+
+	onSaveDarts: function (container, points, editorPoints) {
+		if (points === 0) {
+			this.winner(this.players[this.activePlayerInd]);
+		} else {
+
+			if (this.activePlayerInd < this.players.length - 1) {
+				this.activePlayerInd += 1;
+			} else {
+				this.activePlayerInd = 0;
+			}
+
+			this.next();
+		}
+	},
+
+	next: function () {
+		var self = this;
+		$.each(this.players, function(i, item) {
 			var selector = item.container;
-			if (i != activePlayerInd) {
+			if (i != self.activePlayerInd) {
 				$(selector + ' input.point-editor').attr('disabled', true);
 				$(selector + ' a').attr('disabled', true);
 				$(selector).removeClass('active-player');
@@ -78,19 +143,17 @@ function startGame(playerCount, game) {
 				$(selector).addClass('active-player');
 			}
 		});
-	}
+	},
 
-	start();
-	next();
-}
+	create: function (playerCount, game) {
+		var self = this;
+		this.players = [];
+		this.game = game;
 
-function randomNames() {
-	var nameHell = ['Randall', 'Kugli', 'Bumi', 'Plaplap', 'Uxi', 'Saxi', 'Jockey', 'Ubul', 'Lukas'];
-	var res = [];
-	while (res.length < 4) {
-		var cut = Math.ceil( Math.random() * nameHell.length - 1);
-		res.push(nameHell[cut]);
-		nameHell = nameHell.slice(0, cut).concat(nameHell.slice(cut + 1));
+		this._createPlayers(playerCount);
+		this._setNames();
+		this._start(game);
+
+		this.next();
 	}
-	return res;
-}
+};

@@ -1,32 +1,44 @@
 function KDarts(X01) {
 
-	//var X01 = 301;
 	var points = X01;
 	var shots = [];
 	var containerSelector;
 
-	var saveDartsCallback;
-	var player = null;
-	var gameId = null;
+	var saveDartsCallback,
+		saveContext,
+		player = null;
 
-	this.init = function (playerName, container, dartsCallback) {
+	this.init = function (playerName, container, dartsCallback, callbackContext) {
 		containerSelector = container;
 		saveDartsCallback = dartsCallback;
+		saveContext = callbackContext ? callbackContext : this;
 		player = playerName;
-		gameId = X01 + '_' + Math.round(Math.random()* 9999) + '_' + ((new Date()).toISOString());
 
-		$(containerSelector + ' .player-name').text(playerName);
-		$(containerSelector + ' .current-points').text(points);
+		initTexts();
 		$(containerSelector + ' .point-editor').keyup(genPoints);
 		$(containerSelector + ' .save').click(savePoints);
 		$(containerSelector).keydown(function(event){
 			if(event.keyCode == 13) {
 				event.preventDefault();
 				savePoints();
-				return false;
+				return true;
 			}
 		});
 	};
+
+	this.reset = function () {
+		points = X01;
+		shots = [];
+		$(containerSelector + ' .avg').text('');
+		$(containerSelector + ' .shot-list').children().remove();
+		initTexts();
+
+	};
+
+	function initTexts() {
+		$(containerSelector + ' .player-name').text(player);
+		$(containerSelector + ' .current-points').text(points);
+	}
 
 	/**
 	 * Generates the current state of the points, updates the remaining points
@@ -43,7 +55,7 @@ function KDarts(X01) {
 		var editorPoints = _editorPoints();
 		if (!editorPoints.empty && !editorPoints.invalid) {
 			saveAndUpdatePoints(editorPoints);
-			saveDartsCallback(containerSelector, points, editorPoints);
+			saveDartsCallback.call(saveContext, containerSelector, points, editorPoints);
 		}
 	}
 
@@ -67,15 +79,6 @@ function KDarts(X01) {
 		var avg = Math.round(sum / shots.length);
 		$(containerSelector + ' .avg').text(avg);
 
-		// save user stat
-		var playerStat = localStorage['player'];
-		if (playerStat === undefined) {
-			playerStat = {};
-			playerStat[gameId] = {shots: []};
-		}
-		playerStat[gameId].shots.push(editorPoints);
-		localStorage.setItem(player, playerStat);
-
 		// cleanup
 		$(containerSelector + ' .point-editor').val('');
 		$(containerSelector + ' .gen-points').text('');
@@ -96,6 +99,8 @@ function KDarts(X01) {
 				$(containerSelector + ' .remaining-points').text('');
 			}
 
+			$(containerSelector + ' .current-points').text(points - editorPoints.points);
+			//if ($(containerSelector + ' .current-points').has(''))
 		} else {
 			$(containerSelector + ' .gen-points').text('');
 			$(containerSelector + ' .remaining-points').text('');

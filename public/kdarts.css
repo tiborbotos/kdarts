@@ -1,0 +1,148 @@
+
+body {
+  background: url(family-dart-game_list.jpg) no-repeat center fixed;
+}
+
+
+/* 
+ Game manager 
+ */
+.game {
+  display: none;
+}
+.player-name-editor {
+  display: none;
+}
+.player-name-3,
+.player-name-4 {
+  display: none;
+}
+
+.navbar {
+  background-color: rgba(0,0,0,0.7);
+  padding: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.2em;
+  color: white;
+}
+.navbar .winner-navbar {
+  color: rgb(35, 173, 35);
+  text-shadow: 1px 1px 10px #6A866E;
+  padding: 2em;
+  text-align: center;
+  line-height: 5em;
+}
+.navbar .winner-navbar .btn{
+  box-shadow: 1px 1px 10px #6A866E
+}
+.navbar .winner-navbar .glyphicon {
+  font-size: 30px;
+}
+.navbar .winner-navbar .label {
+  font-size: 40px;
+}
+.navbar h1 {
+  font-size: 28px;
+  margin-top: 10px;
+}
+.navbar h1 small {
+  color: #EEE;
+}
+
+/* 
+ Game settings 
+ */
+.player-count .player-count-btn:active, 
+.player-count .player-count-btn.active {
+  /*background-color: #3EE71D;*/
+}
+.player-name-editor .form-group:first-child {
+  margin-top: 10px;
+}
+.player-name-editor .form-group {
+  margin-bottom: 5px;
+}
+
+
+
+/*
+ X01 classes
+ */
+
+/* X01 player container styles */
+.x01-darts {
+  height: 210px;
+}
+
+/* points editor */
+.points-editor-container div.input-group {
+  width: 100%;
+}
+.points-editor-container .input-group .input-group-addon.gen-points {
+  border-left: 0;
+  border-radius: 4px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  color: #999;
+  width: 3.2em;
+}
+.points-editor-container div.input-group a.btn.save {
+  margin-left: 10px;
+}
+
+.player-name {
+  float: left;
+}
+
+/* current points and statistics */
+.current-points {
+  font-size: 2em;
+  color: rgb(7, 113, 206);
+  font-weight: bold;
+  font-family: monospace;
+  }
+.point-lists-stats .status {
+  font-weight: bold;
+  font-family: monospace;
+}
+.point-lists-stats .avg-label, .remaining-label {
+  font-weight: normal;
+  color: #CCC;
+  margin-right: 1em;
+}
+.point-lists-stats .remaining-label {
+  display: none;
+}
+.point-lists-stats .avg {
+  color: #999;
+  width: 4em;
+}
+.point-lists-stats .out-suggestions > .label {
+  font-size: 1em;
+  font-family: sans-serif;
+  font-weight: normal;
+}
+.point-lists-stats {
+  font-family: monospace;
+}
+
+/* list of previous shots */
+.shot-list {
+  border-top: 1px solid #CCC;
+  font-family: monospace;
+  font-size: 12px;
+  padding-left: 3em;
+  height: 40px;
+  overflow-y: auto;
+}
+.shot-list > span {
+  display: block;
+}
+
+
+/*
+ Utility classes
+ */
+.hide {
+  display: none;
+}

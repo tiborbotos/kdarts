@@ -32,7 +32,8 @@ function KDarts(X01) {
 		$(containerSelector + ' .avg').text('');
 		$(containerSelector + ' .shot-list').children().remove();
 		initTexts();
-
+		var outContainer = $(containerSelector + ' .out-suggestions');
+		outContainer.children().remove();
 	};
 
 	function initTexts() {
@@ -40,6 +41,7 @@ function KDarts(X01) {
 		$(containerSelector + ' .current-points').text(points);
 	}
 
+	this.update = function () { genPoints(); }
 	/**
 	 * Generates the current state of the points, updates the remaining points
 	 */

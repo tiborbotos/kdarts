@@ -1,5 +1,25 @@
-var dartsManager = {
+var keyboardManager = {
+	activeEditor: null,
+	activePlayer: null,
+	init: function () {
+		var self = this;
 
+		$('.keyboard .button').show().click(function (event) {
+			var key = $(event.currentTarget).attr('data-key');
+			if (key !== 'delete') {
+				if (key === 'b' || key === 'db') {
+					key = ' ' + key + ' ';	
+				}
+				self.activeEditor.val(self.activeEditor.val() + key);
+			} else {
+				self.activeEditor.val(self.activeEditor.val().substring(0, self.activeEditor.val().length - 1));
+			}
+			self.activePlayer.update();
+		});
+	}
+};
+
+var dartsManager = {
 	players: [],
 	activePlayerInd: 0,
 	timer: null,
@@ -57,7 +77,6 @@ var dartsManager = {
 
 	_start: function (game) {
 		var self = this;
-		this.gameStarted = Math.floor((new Date()).getTime() / 1000);
 
 		this.activePlayerInd = 0;
 		this.inGame = true;
@@ -71,11 +90,13 @@ var dartsManager = {
 		$('.js_welcome-navbar').hide();
 		$('.js_x01-navbar').show();
 		this._initTimer();
+		keyboardManager.init();
 	},
 
 	_initTimer: function () {
 		var self = this;
 		$('.js_timer').text('00:00').show();
+		this.gameStarted = Math.floor((new Date()).getTime() / 1000);
 		this.timer = setInterval(function () {
 			var now = Math.floor((new Date()).getTime() / 1000),
 				elapsed = now - self.gameStarted,
@@ -137,7 +158,10 @@ var dartsManager = {
 				$(selector + ' a').attr('disabled', true);
 				$(selector).removeClass('active-player');
 			} else {
-				$(selector + ' input.point-editor').attr('disabled', false);
+				var activeEditor = $(selector + ' input.point-editor');
+				keyboardManager.activeEditor = activeEditor;
+				keyboardManager.activePlayer = self.players[i].player;
+				activeEditor.attr('disabled', false);
 				$(selector + ' a').attr('disabled', false);
 				$(selector + ' input.point-editor').focus();
 				$(selector).addClass('active-player');

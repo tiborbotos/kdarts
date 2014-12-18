@@ -90,7 +90,6 @@ var dartsManager = {
 		$('.js_welcome-navbar').hide();
 		$('.js_x01-navbar').show();
 		this._initTimer();
-		keyboardManager.init();
 	},
 
 	_initTimer: function () {
@@ -109,6 +108,7 @@ var dartsManager = {
 
 	winner: function (player) {
 		clearInterval(this.timer);
+		this.inGame = false;
 
 		$('.js_winner-navbar').show();
 		var self = this;
@@ -120,6 +120,7 @@ var dartsManager = {
 			self.activePlayerInd = 0;
 			self._initTimer();
 			$('.js_winner-navbar').hide();
+			self.inGame = true;
 			self.next();
 		});
 		
@@ -130,7 +131,6 @@ var dartsManager = {
 			$('.js_winner-navbar').hide();
 			$('.js_x01-navbar').hide();
 			$('.js_welcome-navbar').show();
-			self.inGame = false;
 		});
 	},
 

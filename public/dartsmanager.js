@@ -1,20 +1,25 @@
 var keyboardManager = {
+	isMobile: false,
 	activeEditor: null,
 	activePlayer: null,
 	init: function () {
 		var self = this;
 
-		$('.keyboard .button').show().click(function (event) {
+		$('.keyboard').show();
+		$('.keyboard .button').click(function (event) {
 			var key = $(event.currentTarget).attr('data-key');
-			if (key !== 'delete') {
+			if (key === 'delete') {
+				self.activeEditor.val(self.activeEditor.val().substring(0, self.activeEditor.val().length - 1));
+				self.activePlayer.update();
+			} else if (key === 'enter') {
+				self.activePlayer.save();
+			} else {
 				if (key === 'b' || key === 'db') {
 					key = ' ' + key + ' ';	
 				}
 				self.activeEditor.val(self.activeEditor.val() + key);
-			} else {
-				self.activeEditor.val(self.activeEditor.val().substring(0, self.activeEditor.val().length - 1));
+				self.activePlayer.update();
 			}
-			self.activePlayer.update();
 		});
 	}
 };
@@ -163,7 +168,9 @@ var dartsManager = {
 				keyboardManager.activePlayer = self.players[i].player;
 				activeEditor.attr('disabled', false);
 				$(selector + ' a').attr('disabled', false);
-				$(selector + ' input.point-editor').focus();
+				if (!keyboardManager.isMobile) {
+					$(selector + ' input.point-editor').focus();
+				}
 				$(selector).addClass('active-player');
 			}
 		});

@@ -135,7 +135,7 @@
     </div>
   </div>
 
-  <div class="keyboard">
+  <div class="keyboard" style="display: none">
     <div class="wrapper">
       <span class="button" data-key="t">Treble</span>
       <span class="button" data-key="1">1</span>
@@ -152,7 +152,7 @@
       <span class="button" data-key="delete">←</span>
       <span class="button" data-key="b">Bull</span>
       <span class="button" data-key="0">0</span>
-      <span class="button" data-key="db">DBull</span>
+      <span class="button" data-key="enter">Enter</span>
     </wrapper>
   </div>
 
@@ -229,6 +229,7 @@ window.onbeforeunload = function(event) {
 };
 
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+  keyboardManager.isMobile = true;
   keyboardManager.init();
 }
 

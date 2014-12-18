@@ -36,12 +36,15 @@ function KDarts(X01) {
 		outContainer.children().remove();
 	};
 
+	this.update = function () { genPoints(); }
+	this.save = function () { savePoints(); }
+
+
 	function initTexts() {
 		$(containerSelector + ' .player-name').text(player);
 		$(containerSelector + ' .current-points').text(points);
 	}
 
-	this.update = function () { genPoints(); }
 	/**
 	 * Generates the current state of the points, updates the remaining points
 	 */

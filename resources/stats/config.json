@@ -1,0 +1,61 @@
+{
+	"type": "Collection",
+	"properties": {
+		"userid": {
+			"name": "userid",
+			"type": "string",
+			"typeLabel": "string",
+			"required": true,
+			"id": "userid",
+			"order": 0
+		},
+		"matchid": {
+			"name": "matchid",
+			"type": "string",
+			"typeLabel": "string",
+			"required": true,
+			"id": "matchid",
+			"order": 1
+		},
+		"started": {
+			"name": "started",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "started",
+			"order": 2
+		},
+		"shots": {
+			"name": "shots",
+			"type": "array",
+			"typeLabel": "array",
+			"required": false,
+			"id": "shots",
+			"order": 3
+		},
+		"avg": {
+			"name": "avg",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "avg",
+			"order": 4
+		},
+		"avg9": {
+			"name": "avg9",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "avg9",
+			"order": 5
+		},
+		"dartcount": {
+			"name": "dartcount",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "dartcount",
+			"order": 6
+		}
+	}
+}

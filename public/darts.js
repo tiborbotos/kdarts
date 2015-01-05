@@ -36,9 +36,13 @@ function KDarts(X01) {
 		outContainer.children().remove();
 	};
 
-	this.update = function () { genPoints(); }
-	this.save = function () { savePoints(); }
+	this.update = function () {
+		genPoints();
+	};
 
+	this.save = function () {
+		savePoints();
+	};
 
 	function initTexts() {
 		$(containerSelector + ' .player-name').text(player);
@@ -50,6 +54,7 @@ function KDarts(X01) {
 	 */
 	function genPoints() {
 		var editorPoints = _editorPoints();
+		editorPoints.remaining = points;
 		updateGenAndRemainginPosts(editorPoints);
 	}
 
@@ -58,7 +63,7 @@ function KDarts(X01) {
 	 */
 	function savePoints() {
 		var editorPoints = _editorPoints();
-		if (!editorPoints.empty && !editorPoints.invalid) {
+		if (!editorPoints.invalid) {
 			saveAndUpdatePoints(editorPoints);
 			saveDartsCallback.call(saveContext, containerSelector, points, editorPoints);
 		}
@@ -73,7 +78,7 @@ function KDarts(X01) {
 		points -= editorPoints.points;
 		while (editorPoints.darts.length < 3) {
 			editorPoints.darts.push(0);
-			editorPoints.rawshots.push('0');
+			editorPoints.rawshots.push('');
 		}
 		shots.push(editorPoints);
 		$(containerSelector + ' .current-points').text(points);
@@ -201,11 +206,15 @@ function KDarts(X01) {
 		var genPoints = $(containerSelector + ' .gen-points');
 
 		var invalid = {invalid: true, empty: false, points: 0};
-		var empty = {invalid: false, empty: true, points: 0, darts: []};
+		var empty = {invalid: false, empty: true, points: 0, darts: [], rawshots: []};
 
 		var value = pointEditor.val().trim();
 		var darts = [];
 		var dartsStr = value.length > 0 ? value.split(' ') : [];
+
+		if (value === '-') {
+			return empty;
+		}
 
 		// convert and check dartsStr into darts[]
 		var hasInvalid = false;
@@ -220,7 +229,6 @@ function KDarts(X01) {
 		if (hasInvalid) {
 			return invalid;
 		}
-
 
 		if (value !== '' && darts.length > 0 && darts.length <= 3) {
 			var points = darts.reduce(function (l,r) { return l + r;});

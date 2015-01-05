@@ -10,13 +10,13 @@ body {
 .game {
   display: none;
 }
-.player-name-editor {
+/*.player-name-editor {
   display: none;
 }
 .player-name-3,
 .player-name-4 {
   display: none;
-}
+}*/
 
 .navbar {
   background-color: rgba(0,0,0,0.7);
@@ -52,10 +52,6 @@ body {
 /* 
  Game settings 
  */
-.player-count .player-count-btn:active, 
-.player-count .player-count-btn.active {
-  /*background-color: #3EE71D;*/
-}
 .player-name-editor .form-group:first-child {
   margin-top: 10px;
 }
@@ -63,7 +59,19 @@ body {
   margin-bottom: 5px;
 }
 
-
+.player-login-container .js_player-login-btn, .player-login-container .js_player-logout-btn  {
+  width: 100px;
+}
+.player-login-container input:disabled {
+    background-color: rgba(0, 255, 0, 0.4);
+}
+.player-name-editor-btn {
+  padding-top: 7px;
+  padding-bottom: 5px;
+}
+.player-name-editor-btn span {
+  font-size: 15px;
+}
 
 /*
  X01 classes

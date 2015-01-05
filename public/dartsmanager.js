@@ -15,7 +15,7 @@ var keyboardManager = {
 				self.activePlayer.save();
 			} else {
 				if (key === 'b' || key === 'db') {
-					key = ' ' + key + ' ';	
+					key = ' ' + key + ' ';
 				}
 				self.activeEditor.val(self.activeEditor.val() + key);
 				self.activePlayer.update();
@@ -26,46 +26,49 @@ var keyboardManager = {
 
 var dartsManager = {
 	players: [],
+	round: 1,
+	matchId: '',
 	activePlayerInd: 0,
 	timer: null,
 	gameStarted: null,
 	inGame: false,
 
 	_createPlayers: function (playerCount) {
-		var i = 0,
-			x01Template = $('.x01-darts-tml'),
-			gameContainer = $('.row.game');
-
-		// create player containers
-		$('.x01-darts-tml').show();
+		this.players = [];
+		var x01Template = $('.x01-darts-tml'),
+			gameContainer = $('.row.game'),
+			self = this,
+			users = userManager.getPlayers(),
+			i = 0,
+			player,
+			selector;
+		
+		this.matchId = Math.floor(Math.random() * 10000000).toString();
 		while (i < playerCount) {
-			var selector = 'd-player' + (i + 1).toString();
-			var p = {
-					name: 'Player' + (i + 1).toString(),
-					container: '.' + selector
+			if (i < users.length) {
+				user = users[i];
+			} else { // fake user
+				user = {
+					username: 'Player ' + (i + 1).toString()
 				};
+			}
 			
-			var playerTml = x01Template.clone().removeClass('x01-darts-tml').addClass('x01-darts');
-			playerTml.find('>div').addClass(selector).parent().addClass('dart-player-instance');
-			gameContainer.append(playerTml);
-			this.players.push(p);
+			selector = 'd-player' + (i + 1).toString();
+			player = {
+				name: user.username,
+				container: '.' + selector,
+				user: user
+			};
+			gameContainer.append(createTemplate(selector));
+			self.players.push(player);
 			i += 1;
 		}
 
-		// set names
-		$.each(this.players, function(i, item) {
-			if ($('.player-name-' + (i + 1)).val() !== '') {
-				item.name = $('.player-name-' + (i + 1)).val();
-			}
-		});
-	},
-
-	_setNames: function () {
-		$.each(this.players, function(i, item) {
-			if ($('.player-name-' + (i + 1)).val() !== '') {
-				item.name = $('.player-name-' + (i + 1)).val();
-			}
-		});
+		function createTemplate(selector) {
+			var playerTml = x01Template.clone().removeClass('x01-darts-tml').addClass('x01-darts');
+			playerTml.find('>div').addClass(selector).parent().addClass('dart-player-instance').show();
+			return playerTml;
+		}
 	},
 
 	_zeroEx: function (n) {
@@ -83,11 +86,15 @@ var dartsManager = {
 	_start: function (game) {
 		var self = this;
 
+		this.round = 0;
 		this.activePlayerInd = 0;
 		this.inGame = true;
 		$('.x01-darts-tml').hide();
 		$.each(this.players, function(i, item) {
 			console.log('init player ', item);
+			if (item.user.initStats) {
+				item.user.initStats(self.matchId);
+			}
 			item.player = new KDarts(game);
 			item.player.init(item.name, item.container, self.onSaveDarts, self);
 		});
@@ -128,6 +135,12 @@ var dartsManager = {
 			self.inGame = true;
 			self.next();
 		});
+
+		$.each(this.players, function (i, player) {
+			if (player.user.savePoints) {
+				player.user.savePoints();
+			}
+		});
 		
 		$('#closeplay').click(function () {
 			$('.row.game .dart-player-instance').remove();
@@ -140,10 +153,16 @@ var dartsManager = {
 	},
 
 	onSaveDarts: function (container, points, editorPoints) {
-		if (points === 0) {
-			this.winner(this.players[this.activePlayerInd]);
-		} else {
+		var player = this.players[this.activePlayerInd],
+			user = player.user;
 
+		if (user.registerPoints) {
+			user.registerPoints(editorPoints, this.round, points);
+		}
+
+		if (points === 0) {
+			this.winner(player);
+		} else {
 			if (this.activePlayerInd < this.players.length - 1) {
 				this.activePlayerInd += 1;
 			} else {
@@ -155,7 +174,12 @@ var dartsManager = {
 	},
 
 	next: function () {
-		var self = this;
+		var self = this,
+			player;
+		if (this.activePlayerInd === 0) {
+			this.round += 1;
+		}
+
 		$.each(this.players, function(i, item) {
 			var selector = item.container;
 			if (i != self.activePlayerInd) {
@@ -178,11 +202,9 @@ var dartsManager = {
 
 	create: function (playerCount, game) {
 		var self = this;
-		this.players = [];
 		this.game = game;
 
 		this._createPlayers(playerCount);
-		this._setNames();
 		this._start(game);
 
 		this.next();

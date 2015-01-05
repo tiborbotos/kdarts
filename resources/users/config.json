@@ -1,3 +1,45 @@
 {
-	"type": "UserCollection"
+	"type": "Collection",
+	"properties": {
+		"username": {
+			"name": "username",
+			"type": "string",
+			"typeLabel": "string",
+			"required": true,
+			"id": "username",
+			"order": 0
+		},
+		"password": {
+			"name": "password",
+			"type": "string",
+			"typeLabel": "string",
+			"required": true,
+			"id": "password",
+			"order": 1
+		},
+		"registered": {
+			"name": "registered",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "registered",
+			"order": 2
+		},
+		"sessionid": {
+			"name": "sessionid",
+			"type": "string",
+			"typeLabel": "string",
+			"required": false,
+			"id": "sessionid",
+			"order": 3
+		},
+		"validuntil": {
+			"name": "validuntil",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "validuntil",
+			"order": 4
+		}
+	}
 }

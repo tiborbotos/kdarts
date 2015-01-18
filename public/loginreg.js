@@ -10,6 +10,24 @@
 		$('.js_player-count-btn').click(onPlayerCountClicked);
 
 		$('.js_player-editor').click(onPlayerNameEditorClicked);
+
+		$('.js_player1-name,.js_player2-name,.js_player3-name,.js_player4-name').keyup(function (event) {
+			if (event.which === 13) {
+				event.currentTarget = $(event.currentTarget).siblings().find('button.js_player-login-btn')[0];
+				onPlayerLoginButtonClicked(event);
+			}
+		});
+		$('.js_name-container,.js_password-container,.js_repeatpassword-container').keyup(onEnterPressed);
+	}
+
+	function onEnterPressed(event) {
+		if (event.which === 13) {
+			if ($('.js_register-btn:visible').length === 1) {
+				onRegisterButtonClicked();
+			} else {
+				onLoginButtonClicked();
+			}
+		}
 	}
 
 	function clearTexts() {
@@ -178,7 +196,7 @@
 
 	function onPlayerNameEditorClicked() {
 		if (userManager.playerCount() === 0) {
-			$('.js_player-login').show(200);
+			$('.js_player-login').toggle(200);
 		}
 	}
 
@@ -186,7 +204,6 @@
 		$('.js_player-count-btn').removeClass('active');
 		$(event.currentTarget).addClass('active');
 		var count = Number($(event.currentTarget).attr('data-id'));
-		//$('.js_player-name-container').hide();
 		var animation = ($('.js_player-login:visible').length > 0) ? 200 : undefined;
 
 		if (count <= 3) {

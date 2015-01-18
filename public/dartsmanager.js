@@ -2,6 +2,7 @@ var keyboardManager = {
 	isMobile: false,
 	activeEditor: null,
 	activePlayer: null,
+
 	init: function () {
 		var self = this;
 
@@ -20,6 +21,14 @@ var keyboardManager = {
 				self.activeEditor.val(self.activeEditor.val() + key);
 				self.activePlayer.update();
 			}
+		});
+
+		$('.keyboard .button').click(function (event) {
+			var target = $(event.currentTarget); 
+			target.addClass('clicked');
+			setTimeout(function () {
+				target.removeClass('clicked');
+			}, 200);
 		});
 	}
 };
@@ -93,7 +102,7 @@ var dartsManager = {
 		$.each(this.players, function(i, item) {
 			console.log('init player ', item);
 			if (item.user.initStats) {
-				item.user.initStats(self.matchId);
+				item.user.initStats(self.matchId, self.game);
 			}
 			item.player = new KDarts(game);
 			item.player.init(item.name, item.container, self.onSaveDarts, self);
@@ -208,5 +217,11 @@ var dartsManager = {
 		this._start(game);
 
 		this.next();
+
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+			keyboardManager.isMobile = true;
+			keyboardManager.init();
+		}
+
 	}
 };

@@ -3,7 +3,7 @@ function User(playerIndex, user, sessionId) {
 	this.sessionId = sessionId;
 	this.user = user;
 	this.username = user.username;
-	this.sessionTimer = setInterval(updateSession, 1000 * 60 * 5);
+	this.sessionTimer = setInterval(updateSession.bind(this), 1000 * 60 * 5);
 
 	this.logout = function () {
 		this.sessionId = '';
@@ -13,12 +13,13 @@ function User(playerIndex, user, sessionId) {
 
 	this.stats = {};
 
-	this.initStats = function (matchId) {
+	this.initStats = function (matchId, game) {
 		this.stats = {
 			userid: this.user.id,
 			matchid: matchId,
 			started: +new Date(),
-			shots: []
+			shots: [],
+			game: game
 		};
 	};
 
@@ -31,22 +32,17 @@ function User(playerIndex, user, sessionId) {
 			shot2: editorPoints.rawshots[1],
 			shot3: editorPoints.rawshots[2]
 		});
-		this.stats.avg = ( (this.stats.avg || 0) + editorPoints.points) / round;
-		if (round <= 3) {
-			this.stats.avg9 = ( (this.stats.avg9 || 0) + editorPoints.points) / round;
-		}
-		this.stats.dartcount = this.stats.dartcount || 0;
-		if (remainingpoints  === 0) {
-			$.each(editorPoints.rawshots, function (i, shot) {
-				self.stats.dartcount += (shot !== '') ? 1 : 0;
-			});
-		} else {
-			this.stats.dartcount += 3;
-		}
 	};
 
 	this.savePoints = function (matchId) {
-		var save = this.stats;
+		var save = this.stats,
+			i,
+			avg9 = 0;
+		for (i = 0; i < 3 && i < this.stats.shots.length; i++) {
+			avg9 += this.stats.shots[i].points;
+		}
+		save.avg9 = avg9 / 3;
+		save.avg = this.stats.game / this.stats.shots.length;
 
 		dpd.stats.post(save, function (result, err) {
 			if (err) {

@@ -107,6 +107,7 @@ body {
   bottom: 10px;
   left: 0;
   right: 0;
+  z-index: 100;
 }
 
 .keyboard .wrapper {
@@ -127,6 +128,10 @@ body {
   color: white;
   margin: 6px;
   cursor: pointer;
+  transition: background 0.3s;
+}
+.keyboard .wrapper .button.clicked {
+  background: rgba(0,0,128,0.7);
 }
 
 /* current points and statistics */

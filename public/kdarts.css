@@ -10,14 +10,6 @@ body {
 .game {
   display: none;
 }
-/*.player-name-editor {
-  display: none;
-}
-.player-name-3,
-.player-name-4 {
-  display: none;
-}*/
-
 .navbar {
   background-color: rgba(0,0,0,0.7);
   padding: 2rem;
@@ -47,6 +39,13 @@ body {
 }
 .navbar h1 small {
   color: #EEE;
+}
+.navbar .abort-game {
+    margin-left: 15px;
+    cursor: pointer;
+}
+.navbar .abort-game .label {
+    display: inline-block;
 }
 
 /* 
@@ -158,9 +157,11 @@ body {
   width: 4em;
 }
 .point-lists-stats .out-suggestions > .label {
-  font-size: 1em;
-  font-family: sans-serif;
-  font-weight: normal;
+font-size: 1.4em;
+font-family: sans-serif;
+font-weight: normal;
+border-radius: 0;
+padding: 0.3em;
 }
 .point-lists-stats {
   font-family: monospace;
@@ -178,7 +179,6 @@ body {
 .shot-list > span {
   display: block;
 }
-
 
 /*
  Utility classes

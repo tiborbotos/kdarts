@@ -24,7 +24,7 @@ var keyboardManager = {
 		});
 
 		$('.keyboard .button').click(function (event) {
-			var target = $(event.currentTarget); 
+			var target = $(event.currentTarget);
 			target.addClass('clicked');
 			setTimeout(function () {
 				target.removeClass('clicked');
@@ -60,6 +60,9 @@ var dartsManager = {
 				user = {
 					username: 'Player ' + (i + 1).toString()
 				};
+				if ($('.js_player' + (i + 1) + '-name').val().trim() !== '') {
+					user.username = $('.js_player' + (i + 1) + '-name').val();
+				}
 			}
 			
 			selector = 'd-player' + (i + 1).toString();
@@ -110,6 +113,11 @@ var dartsManager = {
 		$('.game-info').text('KDarts ' + game);
 		$('.js_welcome-navbar').hide();
 		$('.js_x01-navbar').show();
+		$('.js_abort-game').show().click(function () {
+			if (confirm('Are you sure you want to abort this game? All data will be lost!')) {
+				self.closePlay();
+			}
+		});
 		this._initTimer();
 	},
 
@@ -128,12 +136,14 @@ var dartsManager = {
 	},
 
 	winner: function (player) {
+		var self = this;
 		clearInterval(this.timer);
 		this.inGame = false;
 
+		$('.js_abort-game').hide();
 		$('.js_winner-navbar').show();
-		var self = this;
 		$('.js_winner-navbar .name').text(player.name + ' won!');
+
 		$('#playagain').click(function () {
 			$.each(self.players, function (i, item) {
 				item.player.reset();
@@ -141,6 +151,7 @@ var dartsManager = {
 			self.activePlayerInd = 0;
 			self._initTimer();
 			$('.js_winner-navbar').hide();
+			$('.js_abort-game').show();
 			self.inGame = true;
 			self.next();
 		});
@@ -150,15 +161,20 @@ var dartsManager = {
 				player.user.savePoints();
 			}
 		});
-		
-		$('#closeplay').click(function () {
-			$('.row.game .dart-player-instance').remove();
-			$('.row.game').hide(350);
-			$('.row.manager').show(250);
-			$('.js_winner-navbar').hide();
-			$('.js_x01-navbar').hide();
-			$('.js_welcome-navbar').show();
-		});
+
+		$('#closeplay').click(this.closePlay.bind(this));
+	},
+
+	closePlay: function () {
+		clearInterval(this.timer);
+		this.inGame = false;
+
+		$('.row.game .dart-player-instance').remove();
+		$('.row.game').hide(350);
+		$('.row.manager').show(250);
+		$('.js_winner-navbar').hide();
+		$('.js_x01-navbar').hide();
+		$('.js_welcome-navbar').show();
 	},
 
 	onSaveDarts: function (container, points, editorPoints) {
@@ -210,12 +226,10 @@ var dartsManager = {
 	},
 
 	create: function (playerCount, game) {
-		var self = this;
 		this.game = game;
 
 		this._createPlayers(playerCount);
 		this._start(game);
-
 		this.next();
 
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {

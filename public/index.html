@@ -10,11 +10,12 @@
 <script type="text/javascript" src="dpd.js"></script>
 <script src="outchart.js"></script>
 <meta charset="utf-8">
-<title>KDarts - The Darts game manager</title>
+<title>KDarts - The Darts score keeper</title>
+<meta name="keywords" content="darts score keeper calculator statistics mobile tablet app scoreboard dartboard x01 501 301" />
+<meta name="description" content="Helps you keep score of x01 darts game. Desktop, Mobile and Tablet with statistics" />
 </head>
 
 <body>
-
 
 <!-- Modal -->
 <div class="modal fade" id="loginRegModal" tabindex="-1" role="dialog" aria-labelledby="LoginRegister" aria-hidden="true">
@@ -64,15 +65,19 @@
     <div class="row navbar">
       <header>
         <div class="col-md-12 js_welcome-navbar">
-          <h1>Kdarts <small>The Darts game manager</small>
+          <h1>Kdarts <small>The Darts score keeper</small>
             <span class="pull-right">
-              <small><a class="btn btn-default" href="#">About</a></small>
+              <small><a class="btn btn-default hidden" href="#">About</a></small>
             </span>
           </h1>
         </div>
 
         <div class="col-md-12 js_x01-navbar" style="display: none">
           <span class="game-info left">Darts X01</span>
+          <span class="pull-right abort-game js_abort-game">
+			  <span class="label label-danger">
+			  	<span class="glyphicon glyphicon-remove"></span> </span>
+			  </span>
           <span class="pull-right js_timer">00:00</span>
         </div>
 
@@ -97,7 +102,7 @@
             <h2><span class="glyphicon glyphicon-user"></span> Players</h2>
             <div class="btn-toolbar" role="toolbar">
               <div class="btn-group">
-                <button id="playerCount2" type="button" class="btn btn-default js_player-count-btn" data-id="1">Practice</button>
+                <button id="playerCount1" type="button" class="btn btn-default js_player-count-btn" data-id="1">Practice</button>
                 <button id="playerCount2" type="button" class="btn btn-default active js_player-count-btn" data-id="2">2</button>
                 <button id="playerCount3" type="button" class="btn btn-default js_player-count-btn" data-id="3">3</button>
                 <button id="playerCount4" type="button" class="btn btn-default js_player-count-btn" data-id="4">4</button>

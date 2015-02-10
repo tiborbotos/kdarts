@@ -25,6 +25,9 @@ function User(playerIndex, user, sessionId) {
 
 	this.registerPoints = function (editorPoints, round, remainingpoints) {
 		var self = this;
+		if (remainingpoints === 0 && userManager.playerCount() > 1) {
+			this.stats.winner = true;
+		}
 		this.stats.shots.push({
 			points: editorPoints.points,
 			round: round,

@@ -1,7 +1,7 @@
 {
   "name": "KDarts",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.1.0",
+  "description": "Darts score keeper for x01 games",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"

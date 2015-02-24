@@ -167,6 +167,14 @@ padding: 0.3em;
   font-family: monospace;
 }
 
+.stats {
+    color: #999;
+    font-family: monospace;
+}
+.stats thead td {
+    width: 26%;
+}
+
 /* list of previous shots */
 .shot-list {
   border-top: 1px solid #CCC;

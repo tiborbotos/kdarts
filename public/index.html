@@ -1,261 +1,282 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="kdarts.css" rel="stylesheet" type="text/css" />
-<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="darts.js"></script>
-<script type="text/javascript" src="dpd.js"></script>
-<script src="outchart.js"></script>
-<meta charset="utf-8">
-<title>KDarts - The Darts score keeper</title>
-<meta name="keywords" content="darts score keeper calculator statistics mobile tablet app scoreboard dartboard x01 501 301" />
-<meta name="description" content="Helps you keep score of x01 darts game. Desktop, Mobile and Tablet with statistics" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="kdarts.css" rel="stylesheet" type="text/css" />
+	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="darts.js"></script>
+	<script type="text/javascript" src="dpd.js"></script>
+	<script src="outchart.js"></script>
+	<meta charset="utf-8">
+	<title>KDarts - The Darts score keeper</title>
+	<meta name="keywords" content="darts score keeper calculator statistics mobile tablet app scoreboard dartboard x01 501 301" />
+	<meta name="description" content="Helps you keep score of x01 darts game. Desktop, Mobile and Tablet with statistics" />
 </head>
 
 <body>
 
 <!-- Modal -->
 <div class="modal fade" id="loginRegModal" tabindex="-1" role="dialog" aria-labelledby="LoginRegister" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="loginRegModalHeader">Login</h4>
-      </div>
-      <div class="modal-body">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="loginRegModalHeader">Login</h4>
+			</div>
+			<div class="modal-body">
 
-        <p class="js_login-welcome">Don't you have an account yet? <a href="#" class="js_signup-btn">Sign up</a> now so we can save your stats!</p>
-        <p class="js_reg-welcome" style="display: none">Choose a name without any special character and a password and click register!</p>
+				<p class="js_login-welcome">Don't you have an account yet? <a href="#" class="js_signup-btn">Sign up</a> now so we can save your stats!</p>
+				<p class="js_reg-welcome" style="display: none">Choose a name without any special character and a password and click register!</p>
 
-        <div class="alert alert-success js_loginreg-success" role="alert"></div>
-        <div class="alert alert-warning js_loginreg-alert" role="alert"></div>
-        <div class="alert alert-danger js_loginreg-error" role="alert"></div>
-        <form>
-          <div class="form-group js_name-container">
-            <label for="username">Name</label>
-            <input type="text" class="form-control" id="username" placeholder="Enter your name">
-          </div>
-          <div class="form-group js_password-container">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password">
-          </div>
-          <div class="form-group js_repeatpassword-container" style="display: none">
-            <label for="repeatpassword">Repeat password</label>
-            <input type="password" class="form-control" id="repeatpassword" placeholder="Password">
-          </div>
-          <div class="form-group js_logout-container" style="display: none">
-            <button type="button" class="js_logout-btn btn btn-primary">Logout</button>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="js_modalclose-btn btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="js_login-btn btn btn-primary">Login</button>
-        <button type="button" class="js_register-btn btn btn-primary" style="display: none">Register</button>
-      </div>
-    </div>
-  </div>
+				<div class="alert alert-success js_loginreg-success" role="alert"></div>
+				<div class="alert alert-warning js_loginreg-alert" role="alert"></div>
+				<div class="alert alert-danger js_loginreg-error" role="alert"></div>
+				<form>
+					<div class="form-group js_name-container">
+						<label for="username">Name</label>
+						<input type="text" class="form-control" id="username" placeholder="Enter your name">
+					</div>
+					<div class="form-group js_password-container">
+						<label for="password">Password</label>
+						<input type="password" class="form-control" id="password" placeholder="Password">
+					</div>
+					<div class="form-group js_repeatpassword-container" style="display: none">
+						<label for="repeatpassword">Repeat password</label>
+						<input type="password" class="form-control" id="repeatpassword" placeholder="Password">
+					</div>
+					<div class="form-group js_logout-container" style="display: none">
+						<button type="button" class="js_logout-btn btn btn-primary">Logout</button>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="js_modalclose-btn btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="button" class="js_login-btn btn btn-primary">Login</button>
+				<button type="button" class="js_register-btn btn btn-primary" style="display: none">Register</button>
+			</div>
+		</div>
+	</div>
 </div>
 
-  <div class="container">
+<div class="container">
 
-    <div class="row navbar">
-      <header>
-        <div class="col-md-12 js_welcome-navbar">
-          <h1>Kdarts <small>The Darts score keeper</small>
+	<div class="row navbar">
+		<header>
+			<div class="col-md-12 js_welcome-navbar">
+				<h1>Kdarts <small>The Darts score keeper</small>
             <span class="pull-right">
               <small><a class="btn btn-default hidden" href="#">About</a></small>
             </span>
-          </h1>
-        </div>
+				</h1>
+			</div>
 
-        <div class="col-md-12 js_x01-navbar" style="display: none">
-          <span class="game-info left">Darts X01</span>
+			<div class="col-md-12 js_x01-navbar" style="display: none">
+				<span class="game-info left">Darts X01</span>
           <span class="pull-right abort-game js_abort-game">
 			  <span class="label label-danger">
 			  	<span class="glyphicon glyphicon-remove"></span> </span>
 			  </span>
-          <span class="pull-right js_timer">00:00</span>
-        </div>
+				<span class="pull-right js_timer">00:00</span>
+			</div>
 
-        <div class="col-md-12 winner-navbar js_winner-navbar" style="display: none">
-          <div>
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="name label label-success">Laci won</span>
-            <span class="glyphicon glyphicon-star"></span>
-          </div>
-          <div>
-            <a href="#" id="playagain" class="btn btn-primary">Play again</a>
-            <a href="#" id="closeplay" class="btn btn-primary">Back to menu</a>
-          </div>
-        </div>
-      </header>
-    </div>
+			<div class="col-md-12 winner-navbar js_winner-navbar" style="display: none">
+				<div>
+					<span class="glyphicon glyphicon-star"></span>
+					<span class="name label label-success">Laci won</span>
+					<span class="glyphicon glyphicon-star"></span>
+				</div>
+				<div>
+					<a href="#" id="playagain" class="btn btn-primary">Play again</a>
+					<a href="#" id="closeplay" class="btn btn-primary">Back to menu</a>
+				</div>
+			</div>
+		</header>
+	</div>
 
-    <div class="row manager">
-      <div class="col-md-4 col-md-offset-4">
-        <div class="well well-lg game-options">
-          <div class="player-count">
-            <h2><span class="glyphicon glyphicon-user"></span> Players</h2>
-            <div class="btn-toolbar" role="toolbar">
-              <div class="btn-group">
-                <button id="playerCount1" type="button" class="btn btn-default js_player-count-btn" data-id="1">Practice</button>
-                <button id="playerCount2" type="button" class="btn btn-default active js_player-count-btn" data-id="2">2</button>
-                <button id="playerCount3" type="button" class="btn btn-default js_player-count-btn" data-id="3">3</button>
-                <button id="playerCount4" type="button" class="btn btn-default js_player-count-btn" data-id="4">4</button>
-              </div>
-              <a href="#" class="btn btn-default pull-right js_player-editor player-name-editor-btn"><span class="glyphicon glyphicon-wrench"></span></a>
-            </div>
+	<div class="row manager">
+		<div class="col-md-4 col-md-offset-4">
+			<div class="well well-lg game-options">
+				<div class="player-count">
+					<h2><span class="glyphicon glyphicon-user"></span> Players</h2>
+					<div class="btn-toolbar" role="toolbar">
+						<div class="btn-group">
+							<button id="playerCount1" type="button" class="btn btn-default js_player-count-btn" data-id="1">Practice</button>
+							<button id="playerCount2" type="button" class="btn btn-default active js_player-count-btn" data-id="2">2</button>
+							<button id="playerCount3" type="button" class="btn btn-default js_player-count-btn" data-id="3">3</button>
+							<button id="playerCount4" type="button" class="btn btn-default js_player-count-btn" data-id="4">4</button>
+						</div>
+						<a href="#" class="btn btn-default pull-right js_player-editor player-name-editor-btn"><span class="glyphicon glyphicon-wrench"></span></a>
+					</div>
 
-            <div class="player-login-container js_player-login" style="display: none">
-              <div class="input-group js_player-name-container js_player1-name-container">
-                <input type="text" class="form-control js_player1-name" placeholder="Player 1 name">
-                <div class="input-group-btn">
-                  <button class="js_player-login-btn js_player1-login btn btn-default" type="button" data-playerid="1">login</button>
-                  <button class="js_player-logout-btn js_player1-logout btn btn-danger" type="button" style="display: none" data-playerid="1">log out</button>
-                </div>
-              </div>
-              <div class="input-group js_player-name-container js_player2-name-container">
-                <input type="text" class="form-control js_player2-name" placeholder="Player 2 name">
-                <div class="input-group-btn">
-                  <button class="js_player-login-btn js_player2-login btn btn-default" type="button" data-playerid="2">login</button>
-                  <button class="js_player-logout-btn js_player2-logout btn btn-danger" type="button" style="display: none" data-playerid="2">log out</button>
-                </div>
-              </div>
-              <div class="input-group js_player-name-container js_player3-name-container" style="display: none">
-                <input type="text" class="form-control js_player3-name" placeholder="Player 3 name">
-                <div class="input-group-btn">
-                  <button class="js_player-login-btn js_player3-login btn btn-default" type="button" data-playerid="3">login</button>
-                  <button class="js_player-logout-btn js_player3-logout btn btn-danger" type="button" style="display: none" data-playerid="3">log out</button>
-                </div>
-              </div>
-              <div class="input-group js_player-name-container js_player4-name-container" style="display: none">
-                <input type="text" class="form-control js_player4-name" placeholder="Player 4 name">
-                <div class="input-group-btn">
-                  <button class="js_player-login-btn js_player4-login btn btn-default" type="button" data-playerid="4">login</button>
-                  <button class="js_player-logout-btn js_player4-logout btn btn-danger" type="button" style="display: none" data-playerid="4">log out</button>
-                </div>
-              </div>
+					<div class="player-login-container js_player-login" style="display: none">
+						<div class="input-group js_player-name-container js_player1-name-container">
+							<input type="text" class="form-control js_player1-name" placeholder="Player 1 name">
+							<div class="input-group-btn">
+								<button class="js_player-login-btn js_player1-login btn btn-default" type="button" data-playerid="1">login</button>
+								<button class="js_player-logout-btn js_player1-logout btn btn-danger" type="button" style="display: none" data-playerid="1">log out</button>
+							</div>
+						</div>
+						<div class="input-group js_player-name-container js_player2-name-container">
+							<input type="text" class="form-control js_player2-name" placeholder="Player 2 name">
+							<div class="input-group-btn">
+								<button class="js_player-login-btn js_player2-login btn btn-default" type="button" data-playerid="2">login</button>
+								<button class="js_player-logout-btn js_player2-logout btn btn-danger" type="button" style="display: none" data-playerid="2">log out</button>
+							</div>
+						</div>
+						<div class="input-group js_player-name-container js_player3-name-container" style="display: none">
+							<input type="text" class="form-control js_player3-name" placeholder="Player 3 name">
+							<div class="input-group-btn">
+								<button class="js_player-login-btn js_player3-login btn btn-default" type="button" data-playerid="3">login</button>
+								<button class="js_player-logout-btn js_player3-logout btn btn-danger" type="button" style="display: none" data-playerid="3">log out</button>
+							</div>
+						</div>
+						<div class="input-group js_player-name-container js_player4-name-container" style="display: none">
+							<input type="text" class="form-control js_player4-name" placeholder="Player 4 name">
+							<div class="input-group-btn">
+								<button class="js_player-login-btn js_player4-login btn btn-default" type="button" data-playerid="4">login</button>
+								<button class="js_player-logout-btn js_player4-logout btn btn-danger" type="button" style="display: none" data-playerid="4">log out</button>
+							</div>
+						</div>
 
-            </div>
-          </div>
+					</div>
+				</div>
 
-          <div class="player-count">
-            <h2>Game</h2>
-            <div class="btn-toolbar" role="toolbar">
-              <div class="btn-group">
-                <button id="gameType301" type="button" class="btn btn-default active js_game-type-btn" data-id="301">301</button>
-                <button id="gameType501" type="button" class="btn btn-default js_game-type-btn" data-id="501">501</button>
-                <button id="gameType1001" type="button" class="btn btn-default js_game-type-btn" data-id="1001">1001</button>
-              </div>
-            </div>
-          </div>
+				<div class="player-count">
+					<h2>Game</h2>
+					<div class="btn-toolbar" role="toolbar">
+						<div class="btn-group">
+							<button id="gameType301" type="button" class="btn btn-default active js_game-type-btn" data-id="301">301</button>
+							<button id="gameType501" type="button" class="btn btn-default js_game-type-btn" data-id="501">501</button>
+							<button id="gameType1001" type="button" class="btn btn-default js_game-type-btn" data-id="1001">1001</button>
+						</div>
+					</div>
+				</div>
 
-          <div class=" clearfix">
+				<div class=" clearfix">
             <span class="pull-right">
               <button id="startgame" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> start</button>
             </span>
-          </div>
-        </div>
-      </div>
-    </div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <div class="row game">
+	<div class="row game">
 
-      <!-- X01 DARTS GAME TEMPLATE -->
-      <div class="col-xs-12 col-sm-6 col-md-6 x01-darts-tml">
-        <div class="well">
-          <section class="player-number">
-            <div class="clearfix">
-              <h4 class="player-name">Randall</h4>
-              <span class="current-points pull-right">301</span>
-            </div>
-            <form class="">
-              <div class="form-group points-editor-container">
-                <div class="input-group">
-                  <input type="text" class="form-control point-editor" placeholder="Enter points">
-                  <span class="input-group-addon gen-points"></span>
-                  <a class="save btn btn-success pull-right">Save</a>
-                </div>
-              </div>
-            </form>
-            
-            <div class="point-lists-stats">
-              <div class="status clearfix">
-                <span class="avg-label pull-left clearfix">avg</span>
-                <span class="avg pull-left clearfix"></span>
-                <span class="hidden remaining-points pull-right clearfix"></span>
-                <span class="hidden remaining-label pull-right clearfix">rem</span>
-                <span class="out-suggestions pull-right"></span>
-              </div>
+		<!-- X01 DARTS GAME TEMPLATE -->
+		<div class="col-xs-12 col-sm-6 col-md-6 x01-darts-tml">
+			<div class="well">
+				<section class="player-number">
+					<div class="clearfix">
+						<h4 class="player-name">Randall</h4>
+						<span class="current-points pull-right">301</span>
+					</div>
+					<form class="">
+						<div class="form-group points-editor-container">
+							<div class="input-group">
+								<input type="text" class="form-control point-editor" placeholder="Enter points">
+								<span class="input-group-addon gen-points"></span>
+								<a class="save btn btn-success pull-right">Save</a>
+							</div>
+						</div>
+					</form>
 
-              <div class="hidden shot-list"></div>
-            </div>
-          </section>
-        </div>
-      </div>
-    </div>
-  </div>
+					<div class="point-lists-stats">
+						<div class="status clearfix">
+							<span class="avg-label pull-left clearfix">avg</span>
+							<span class="avg pull-left clearfix"></span>
+							<span class="hidden remaining-points pull-right clearfix"></span>
+							<span class="hidden remaining-label pull-right clearfix">rem</span>
+							<span class="out-suggestions pull-right"></span>
+						</div>
 
-  <div class="keyboard" style="display: none">
-    <div class="wrapper">
-      <span class="button" data-key="t">Treble</span>
-      <span class="button" data-key="1">1</span>
-      <span class="button" data-key="2">2</span>
-      <span class="button" data-key="3">3</span>
-      <span class="button" data-key="d">Double</span>
-      <span class="button" data-key="4">4</span>
-      <span class="button" data-key="5">5</span>
-      <span class="button" data-key="6">6</span>
-      <span class="button" data-key=" ">⌙</span>
-      <span class="button" data-key="7">7</span>
-      <span class="button" data-key="8">8</span>
-      <span class="button" data-key="9">9</span>
-      <span class="button" data-key="delete">←</span>
-      <span class="button" data-key="b">Bull</span>
-      <span class="button" data-key="0">0</span>
-      <span class="button" data-key="enter">Enter</span>
-    </wrapper>
-  </div>
+						<div class="hidden shot-list"></div>
+
+						<div class="stats hidden">
+							<table>
+								<thead>
+									<tr>
+										<td></td>
+										<td>match</td>
+										<td>today</td>
+										<td>all time</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="js_stat-avg">
+										<td>avg</td>
+										<td class="js_stat-current-match">5</td>
+										<td class="js_stat-today">3</td>
+										<td class="js_stat-alltime">2</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="keyboard" style="display: none">
+	<div class="wrapper">
+		<span class="button" data-key="t">Treble</span>
+		<span class="button" data-key="1">1</span>
+		<span class="button" data-key="2">2</span>
+		<span class="button" data-key="3">3</span>
+		<span class="button" data-key="d">Double</span>
+		<span class="button" data-key="4">4</span>
+		<span class="button" data-key="5">5</span>
+		<span class="button" data-key="6">6</span>
+		<span class="button" data-key=" ">⌙</span>
+		<span class="button" data-key="7">7</span>
+		<span class="button" data-key="8">8</span>
+		<span class="button" data-key="9">9</span>
+		<span class="button" data-key="delete">←</span>
+		<span class="button" data-key="b">Bull</span>
+		<span class="button" data-key="0">0</span>
+		<span class="button" data-key="enter">Enter</span>
+		</wrapper>
+	</div>
 
 
-<script src="dartsmanager.js"></script>
-<script src="usermanager.js"></script>
-<script src="loginreg.js"></script>
-<script>
+	<script src="dartsmanager.js"></script>
+	<script src="usermanager.js"></script>
+	<script src="loginreg.js"></script>
+	<script>
 
-// default  game type
-var gameType = 301;
+		// default  game type
+		var gameType = 301;
 
-// event handler for game type selector
-var gameTypeClicked = function(event) {
-  $('#gameType301').removeClass('active');
-  $('#gameType501').removeClass('active');
-  $('#gameType1001').removeClass('active');
-  gameType = Number($(this).attr('data-id'));
-  $(this).addClass('active');
-};
+		// event handler for game type selector
+		var gameTypeClicked = function(event) {
+			$('#gameType301').removeClass('active');
+			$('#gameType501').removeClass('active');
+			$('#gameType1001').removeClass('active');
+			gameType = Number($(this).attr('data-id'));
+			$(this).addClass('active');
+		};
 
-// initialize event handlers and the game
-$('.js_game-type-btn').click(gameTypeClicked);
+		// initialize event handlers and the game
+		$('.js_game-type-btn').click(gameTypeClicked);
 
-$('#startgame').click(function(evt) {
-  $('.row.manager').hide(250);
-  $('.row.game').show(350);
-  var playerCount = Number($('.js_player-count-btn.active').attr('data-id')),
-    gameType = Number($('.js_game-type-btn.active').attr('data-id'));
-  dartsManager.create(playerCount, gameType);
-});
+		$('#startgame').click(function(evt) {
+			$('.row.manager').hide(250);
+			$('.row.game').show(350);
+			var playerCount = Number($('.js_player-count-btn.active').attr('data-id')),
+					gameType = Number($('.js_game-type-btn.active').attr('data-id'));
+			dartsManager.create(playerCount, gameType);
+		});
 
-window.onbeforeunload = function(event) {
-  if (dartsManager.inGame) {
-    return confirm("Are you sure you want to leave this game?");  
-  }
-};
+		window.onbeforeunload = function(event) {
+			if (dartsManager.inGame) {
+				return confirm("Are you sure you want to leave this game?");
+			}
+		};
 
-</script>
+	</script>
 </body>
 </html>

@@ -56,6 +56,62 @@
 			"required": false,
 			"id": "dartcount",
 			"order": 6
+		},
+		"checkoutfrom": {
+			"name": "checkoutfrom",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "checkoutfrom",
+			"order": 7
+		},
+		"checkoutshots": {
+			"name": "checkoutshots",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "checkoutshots",
+			"order": 8
+		},
+		"game": {
+			"name": "game",
+			"type": "string",
+			"typeLabel": "string",
+			"required": false,
+			"id": "game",
+			"order": 9
+		},
+		"pointsover100": {
+			"name": "pointsover100",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "pointsover100",
+			"order": 10
+		},
+		"pointsover140": {
+			"name": "pointsover140",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "pointsover140",
+			"order": 11
+		},
+		"pointswith180": {
+			"name": "pointswith180",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "pointswith180",
+			"order": 12
+		},
+		"winner": {
+			"name": "winner",
+			"type": "boolean",
+			"typeLabel": "boolean",
+			"required": false,
+			"id": "winner",
+			"order": 13
 		}
 	}
 }

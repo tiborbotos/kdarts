@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="kdarts.css" rel="stylesheet" type="text/css" />
+	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="darts.js"></script>
+	<script type="text/javascript" src="dpd.js"></script>
+	<meta charset="utf-8">
+	<title>KDarts - The Darts score keeper</title>
+	<meta name="keywords" content="darts score keeper calculator statistics mobile tablet app scoreboard dartboard x01 501 301" />
+	<meta name="description" content="Helps you keep score of x01 darts game. Desktop, Mobile and Tablet with statistics" />
+</head>
+<body>
+
+	<div class="container" style="background: rgba(255, 255, 255, .95);">
+		<div class="row">
+
+			<h2 id="player-name"></h2>
+
+			<table class="table">
+				<thead>
+					<tr>
+						<td>#</td>
+						<td>gametype</td>
+						<td>winner</td>
+						<td>avg</td>
+						<td>avg9</td>
+					</tr>
+				</thead>
+				<tbody id="stats">
+
+				</tbody>
+			</table>
+
+			<p>
+				<a onclick="javascript:page(-1)" href="#"><span class="label label-default">&lt;</span></a>
+				<a onclick="javascript:page(1)" href="#"><span class="label label-default pull-right">&gt;</span></a></p>
+		</div>
+	</div>
+
+<script>
+
+	function param(name){
+		if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+			return decodeURIComponent(name[1]);
+	}
+
+	var error = function (errorMsg) {
+			console.log('Error: ' + errorMsg);
+		},
+		username = param('username'),
+		from = Number(param('page')) || 0,
+		pageSize = 2,
+		statCount,
+		userId;
+
+
+	if (!username) {
+		error('No username specified!');
+	} else {
+		dpd.users.get({
+			username: username
+		}, function (results, error) {
+			if (results && results.length === 1) {
+				userid = results[0].id;
+
+				dpd.stats.get({
+					$fields: {started: 1}
+				}, function (results, error) {
+					if (results && results.length > 0) {
+						statCount = results.length;
+					} else {
+						error('Not found stats for this user!');
+					}
+				})
+				loadStats();
+			} else {
+				error('No user found with this name!');
+			}
+		});
+	}
+
+	function page(direction) {
+		from = from + (direction * pageSize);
+		loadStats();
+	}
+
+	function loadStats() {
+		dpd.stats.get({
+			userid: userid,
+			$sort: {started: -1},
+			$limit: pageSize,
+			$skip: from
+		}, function (results, error) {
+			$('#stats').children().remove();
+			$.each(results, function (i, item) {
+				$('<tr><td>' + new Date(item.started) + '</td><td>' + item.game + '</td><td>' + item.winner + '</td><td>' + item.avg + '</td><td>' + item.avg9 + '</td></tr>').appendTo('#stats');
+			});
+
+		});
+	}
+
+</script>
+
+</body>
+</html>

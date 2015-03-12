@@ -135,14 +135,14 @@ var dartsManager = {
 		}, 1000);
 	},
 
-	winner: function (player) {
+	winner: function (winnerPlayer) {
 		var self = this;
 		clearInterval(this.timer);
 		this.inGame = false;
 
 		$('.js_abort-game').hide();
 		$('.js_winner-navbar').show();
-		$('.js_winner-navbar .name').text(player.name + ' won!');
+		$('.js_winner-navbar .name').text(winnerPlayer.name + ' won!');
 
 		$('#playagain').click(function () {
 			$.each(self.players, function (i, item) {
@@ -153,12 +153,18 @@ var dartsManager = {
 			$('.js_winner-navbar').hide();
 			$('.js_abort-game').show();
 			self.inGame = true;
-			self.next();
+			self.matchId = Math.floor(Math.random() * 10000000).toString();
+			$.each(self.players, function(i, item) {
+				console.log('init player ', item);
+				if (item.user.initStats) {
+					item.user.initStats(self.matchId, self.game);
+				}
+			});
 		});
 
 		$.each(this.players, function (i, player) {
 			if (player.user.savePoints) {
-				player.user.savePoints();
+				player.user.savePoints(player === winnerPlayer);
 			}
 		});
 

@@ -1,5 +1,4 @@
-function User(playerIndex, user, sessionId) {
-	this.playerIndex = playerIndex;
+function User(user, sessionId) {
 	this.sessionId = sessionId;
 	this.user = user;
 	this.username = user.username;
@@ -19,12 +18,12 @@ function User(playerIndex, user, sessionId) {
 			matchid: matchId,
 			started: +new Date(),
 			shots: [],
-			game: game
+			game: game,
+			winner: false
 		};
 	};
 
 	this.registerPoints = function (editorPoints, round, remainingpoints) {
-		var self = this;
 		if (remainingpoints === 0 && userManager.playerCount() > 1) {
 			this.stats.winner = true;
 		}
@@ -37,15 +36,63 @@ function User(playerIndex, user, sessionId) {
 		});
 	};
 
-	this.savePoints = function (matchId) {
+	this.savePoints = function (winner) {
 		var save = this.stats,
 			i,
-			avg9 = 0;
+			c,
+			avg9 = 0,
+			shots,
+			dartCount = 0,
+			shotList,
+			doubleOut = false,
+			remainingPoints = this.stats.game,
+			checkoutTries = 0;
+
 		for (i = 0; i < 3 && i < this.stats.shots.length; i++) {
 			avg9 += this.stats.shots[i].points;
 		}
+
+		// calculate out stats
+		for (i = 0; i < this.stats.shots.length; i++) {
+			shots = this.stats.shots[i],
+			shotList = [KDartsHelper.editorItemToPoints(shots.shot1),
+				KDartsHelper.editorItemToPoints(shots.shot2),
+				KDartsHelper.editorItemToPoints(shots.shot3)];
+
+			for (c = 0; c < shotList.length; c++) {
+				if (!isNaN(Number(shotList[c]))) {
+					dartCount += 1;
+					if (doubleOut) {
+						// TODO
+					}
+					else {
+						if (remainingPoints <= 20 || remainingPoints === 25 || remainingPoints === 50) {
+							checkoutTries +=1;
+						}
+					}
+
+					remainingPoints -= shotList[c];
+				}
+			}
+
+			if (shots.points === 180) {
+				save.pointswith180 = (save.pointswith180 || 0) + 1;
+			} else if (shots.points >= 140) {
+				save.pointsover140 = (save.pointsover140 || 0) + 1;
+			} else if (shots.points >= 100) {
+				save.pointsover100 = (save.pointsover100 || 0) + 1;
+			}
+		}
+
+		if (winner) {
+			save.checkoutfrom = this.stats.shots[this.stats.shots.length - 1].points;
+		}
+		save.game = this.stats.game;
+		save.checkoutshots = checkoutTries;
 		save.avg9 = avg9 / 3;
-		save.avg = this.stats.game / this.stats.shots.length;
+		save.avg = (this.stats.game - remainingPoints) / this.stats.shots.length;
+		save.winner = winner || false;
+		save.dartcount = dartCount;
 
 		dpd.stats.post(save, function (result, err) {
 			if (err) {
@@ -77,7 +124,7 @@ var userManager = {
 	players: {},
 
 	login: function (playerInd, user, sessionId) {
-		this.players[playerInd] = new User(playerInd, user, sessionId);
+		this.players[playerInd] = new User(user, sessionId);
 	},
 
 	logout: function (playerInd) {

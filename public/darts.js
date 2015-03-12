@@ -1,3 +1,56 @@
+function KDartsHelper() {}
+
+/**
+ * Formats an editor item into points
+ * @param  {String} item string representation of an item. Accepted values are numbers
+ *  between 0-20, 25, 50, and double, treble values as in a format of {[d|t]}{number|[1-20]}
+ *  AND 'db' as double bull, or 'b' as bull
+ * @return {Number}      Number value of the shoot or undefined
+ */
+KDartsHelper.editorItemToPoints = function (item) {
+	var convItem = item;
+	var double = false;
+	var treble = false;
+	if (item.length > 0 && item.toUpperCase() == 'B') {
+		return 25;
+	}
+	if (item.length > 0 && item.toUpperCase() == 'DB') {
+		return 50;
+	}
+	if (item.length > 0 && item.toUpperCase().indexOf('T') === 0) {
+		treble = true;
+		convItem = item.substr(1);
+	}
+	if (item.length > 0 && item.toUpperCase().indexOf('D') === 0) {
+		double = true;
+		convItem = item.substr(1);
+	}
+	var shoot = Number(convItem || NaN); // if it's an empty string, lets have it -1
+	if (!isNaN(shoot)) {
+		if (shoot < 0 ||
+			(shoot > 20 && shoot != 25 && shoot != 50)) {
+			return undefined;
+		}
+		if ((treble || double) && (shoot === 25 || shoot === 50)) {
+			return undefined;
+		}
+
+		if (treble) {
+			return shoot * 3;
+		}
+		if (double) {
+			return shoot * 2;
+		}
+		return shoot;
+	}
+	// if it starts with t or d we don't want to look like an error, but it's not a valid shoot
+	if (treble || double) {
+		return -1;
+	}
+	return undefined;
+};
+
+
 function KDarts(X01) {
 
 	var points = X01;
@@ -130,7 +183,9 @@ function KDarts(X01) {
 		var outs = out[(points - editorPoints.points).toString()];
 		if (outs !== undefined &&
 			outs.length > 0 &&
-			outs[0] !== 'None') {
+			outs[0] !== 'None' &&
+			editorPoints.darts &&
+			editorPoints.darts.length > 0) {
 
 			var impossible = outs.length > (3 - editorPoints.darts.length);
 			$.each(outs, function (i, item) {
@@ -219,7 +274,7 @@ function KDarts(X01) {
 		// convert and check dartsStr into darts[]
 		var hasInvalid = false;
 		$.each(dartsStr, function (i, item) {
-			var dartPoint = _editorItemToPoints(item);
+			var dartPoint = KDartsHelper.editorItemToPoints(item);//_editorItemToPoints(item);
 			if (dartPoint === undefined) {
 				hasInvalid = true;
 			} else if (dartPoint >= 0) {

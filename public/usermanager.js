@@ -38,21 +38,22 @@ function User(user, sessionId) {
 
 	this.savePoints = function (winner) {
 		var save = this.stats,
-			i,
-			c,
 			avg9 = 0,
-			shots,
 			dartCount = 0,
-			shotList,
 			doubleOut = false,
 			remainingPoints = this.stats.game,
-			checkoutTries = 0;
+			checkoutTries = 0,
+			i,
+			c,
+			shots,
+			shotList;
 
 		for (i = 0; i < 3 && i < this.stats.shots.length; i++) {
 			avg9 += this.stats.shots[i].points;
 		}
 
-		// calculate out stats
+		// calculate out stats by counting down the points
+		// and checking when it reached the last or the chanhce of the last shot
 		for (i = 0; i < this.stats.shots.length; i++) {
 			shots = this.stats.shots[i],
 			shotList = [KDartsHelper.editorItemToPoints(shots.shot1),
@@ -71,10 +72,13 @@ function User(user, sessionId) {
 						}
 					}
 
-					remainingPoints -= shotList[c];
+					if (shots.points > 0) { // decrease the remaining points if it was a valid shot (not over, etc)
+						remainingPoints -= shotList[c];
+					}
 				}
 			}
 
+			// save if the shot is 180, over 140 or over 100
 			if (shots.points === 180) {
 				save.pointswith180 = (save.pointswith180 || 0) + 1;
 			} else if (shots.points >= 140) {

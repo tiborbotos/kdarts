@@ -184,8 +184,7 @@ function KDarts(X01) {
 		if (outs !== undefined &&
 			outs.length > 0 &&
 			outs[0] !== 'None' &&
-			editorPoints.darts &&
-			editorPoints.darts.length > 0) {
+			editorPoints.darts !== undefined) {
 
 			var impossible = outs.length > (3 - editorPoints.darts.length);
 			$.each(outs, function (i, item) {

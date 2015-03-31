@@ -15,8 +15,8 @@ function sha1(c){var l=function(a,b){return a<<b|a>>>32-b},n=function(a){var b="
     l(b,30),b=d,d=k;for(a=40;59>=a;a++)k=l(d,5)+(b&e|b&f|e&f)+h+g[a]+2400959708&4294967295,h=f,f=e,e=l(b,30),b=d,d=k;for(a=60;79>=a;a++)k=l(d,5)+(b^e^f)+h+g[a]+3395469782&4294967295,h=f,f=e,e=l(b,30),b=d,d=k;p=p+d&4294967295;q=q+b&4294967295;r=r+e&4294967295;s=s+f&4294967295;t=t+h&4294967295}k=n(p)+n(q)+n(r)+n(s)+n(t);return k.toLowerCase()};
 
 if (!internal) { 
-    console.log('PUT? ', this);
-    console.log('query', query);
+    //console.log('PUT? ', this);
+    //console.log('query', query);
     // login => check password, create & save session
     if (query.verify) {
         var pass = secure(query.verify);
@@ -25,6 +25,8 @@ if (!internal) {
             this.sessionid = makeid();
             this.validuntil = +new Date() + 1800000;
             console.log('Created new session ', this);
+        } else {
+            error('Invalid session');
         }
     }
 

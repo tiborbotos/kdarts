@@ -1,0 +1,100 @@
+<div>
+
+    <div class="bottom-action-container">
+        <div flex layout="row">
+            <md-button class="md-raised"
+                       layout-fill
+                       ng-click="goBack()" ng-if="phase > 1">Back</md-button>
+
+            <md-button class="md-raised md-primary"
+                       layout-fill
+                       ng-click="showNextPhase()" ng-if="phase < 3">Continue</md-button>
+
+            <md-button class="md-raised md-accent md-hue-3"
+                       layout-fill
+                       ng-click="showNextPhase()" ng-if="phase === 3">Start</md-button>
+        </div>
+    </div>
+
+    <div layout="column">
+        <header layout="column" layout-align="center center">
+            <h1 class="md-display-1 margin-bottom-zero">New Game</h1>
+
+            <p class="md-subhead slide-downx" ng-show="phase === 1">Choose Your Game Type</p>
+            <p class="md-subhead slide-downx" ng-show="phase === 2">Configure Game</p>
+            <p class="md-subhead slide-downx" ng-show="phase === 3">Configure Players</p>
+        </header>
+
+        <div flex layout="column" class="slide-downx" ng-show="phase === 1">
+            <md-button class="md-raised"
+                       ng-class="{'md-accent': gameConfig.game === '170'}"
+                       ng-click="setGame('170')">170
+            </md-button>
+            <md-button class="md-raised"
+                       ng-class="{'md-accent': gameConfig.game === '301'}"
+                       ng-click="setGame('301')">301
+            </md-button>
+            <md-button class="md-raised"
+                       ng-class="{'md-accent': gameConfig.game === '501'}"
+                       ng-click="setGame('501')">501
+            </md-button>
+        </div>
+
+        <md-input-container layout-margin class="slide-downx" ng-show="phase === 1">
+            <label>Legs</label>
+            <md-select name="myModel" ng-model="gameConfig.legs">
+                <md-option value="1">1 leg</md-option>
+                <md-option value="2">2 legs</md-option>
+                <md-option value="3">3 legs</md-option>
+                <md-option value="4">4 legs</md-option>
+                <md-option value="5">5 legs</md-option>
+                <md-option value="6">6 legs</md-option>
+            </md-select>
+        </md-input-container>
+
+
+
+
+
+        <div layout="column" class="slide-downx" ng-if="phase === 2">
+            <label layout-padding>Players</label>
+            <div layout="row">
+                <md-button class="md-raised"
+                           layout-fill
+                           ng-class="{'md-accent': gameConfig.players.length === 2}"
+                           ng-click="playerCount(2)">2</md-button>
+                <md-button class="md-raised"
+                           layout-fill
+                           ng-class="{'md-accent': gameConfig.players.length === 3}"
+                           ng-click="playerCount(3)">3</md-button>
+                <md-button class="md-raised"
+                           layout-fill
+                           ng-class="{'md-accent': gameConfig.players.length === 4}"
+                           ng-click="playerCount(4)">4</md-button>
+            </div>
+        </div>
+
+        <div layout="column" class="slide-downx" ng-if="phase === 2">
+            <label layout-padding>Rules</label>
+            <!-- TODO -->
+            <!--<md-checkbox ng-model="gameConfig.doubleIn" class="margin-bottom-zero">Double in</md-checkbox>-->
+            <md-checkbox ng-model="gameConfig.doubleOut">Double out</md-checkbox>
+        </div>
+
+
+
+
+        <md-list class="md-margin slide-downx" ng-if="phase === 3">
+            <md-list-item ng-repeat="player in gameConfig.players">
+                <div layout="row" layout-fill layout-align="space-around center">
+                    <md-input-container layout-fill class="no-padding">
+                        <label>Name</label>
+                        <input ng-model="player.name" layout-fill type="text">
+                    </md-input-container>
+                    <md-button flex="20" class="md-raised login-button">Login</md-button>
+                </div>
+            </md-list-item>
+        </md-list>
+
+    </div>
+</div>

@@ -246,7 +246,7 @@ function KDarts(X01) {
 	/**
 	 * Converts editor into points
 	 * @param  {String} containerSelector jquery selector
-	 * @return {Object} 
+	 * @return {Object}
 	 *  {
 	 *    points: // sum of the points
 	 *    darts: // array of points of darts

@@ -7,7 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "deployd": "0.8.0"
+    "deployd": "0.8.5"
   },
   "engines": {
     "node": "0.10.x",

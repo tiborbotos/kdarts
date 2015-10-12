@@ -10,8 +10,8 @@
 
 // require deployd
 var deployd = require('deployd');
- 
-// configure database etc. 
+
+// configure database etc.
 var server = deployd({
   port: process.env.PORT || 5000,
   env: 'production',
@@ -20,23 +20,23 @@ var server = deployd({
     port: 63630,
     name: 'kdarts',
     credentials: {
-      username: 'rocky',
+      username: 'rocky2',
       password: 'dslkcj23e3dasxasii'
     }
   }
 });
- 
+
 // heroku requires these settings for sockets to work
 // server.sockets.manager.settings.transports = ["xhr-polling"];
- 
+
 // start the server
 server.listen();
- 
+
 // debug
 server.on('listening', function() {
   console.log("Server is listening on port: " + process.env.PORT);
 });
- 
+
 // Deployd requires this
 server.on('error', function(err) {
   console.error(err);

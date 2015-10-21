@@ -5,3 +5,4 @@ data/
 
 *.sublime-project
 *.sublime-workspace
+.sass-cache

@@ -203,9 +203,7 @@ var kdarts;
             this.darts = [new DartThrow(), new DartThrow(), new DartThrow()];
         }
         Round.prototype.getPoints = function () {
-            return this.darts[0].getPoints() +
-                this.darts[1].getPoints() +
-                this.darts[2].getPoints();
+            return this.darts[0].getPoints() + this.darts[1].getPoints() + this.darts[2].getPoints();
         };
         return Round;
     })();

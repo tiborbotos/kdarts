@@ -68,11 +68,11 @@ var kdarts;
             };
             DartKeyboard.prototype.toggleTreble = function () {
                 this.getCurrentThrow().toggleTreble();
-                console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+                //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
             };
             DartKeyboard.prototype.toggleDouble = function () {
                 this.getCurrentThrow().toggleDouble();
-                console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+                //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
             };
             DartKeyboard.prototype.invalidNumber = function (num) {
                 return !kdarts.DartThrow.isValidShot(this.getCurrentThrow().getShot() + num.toString(), this.getCurrentThrow().isDouble(), this.getCurrentThrow().isTreble());
@@ -85,7 +85,7 @@ var kdarts;
             };
             DartKeyboard.prototype.record = function (num) {
                 this.getCurrentThrow().addNumber(num.toString(), this.getCurrentThrow().isDouble(), this.getCurrentThrow().isTreble());
-                console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+                //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
             };
             DartKeyboard.prototype.deleteNumber = function () {
                 if (this.getCurrentThrow().getShot() > 0) {
@@ -96,7 +96,7 @@ var kdarts;
                     }
                     this.getCurrentThrow().setShot(parseInt(shot));
                 }
-                console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+                //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
             };
             DartKeyboard.prototype.clear = function () {
                 this.getCurrentThrow().setDouble(false);

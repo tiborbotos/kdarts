@@ -31,6 +31,18 @@ module kdarts.home {
                 players: [new Player('Player 1'), new Player('Player 2')]
             };
 
+
+            var previousPlayers = gameManager.getPlayers();
+            if (previousPlayers &&
+                previousPlayers.length > 0) {
+
+                $scope.gameConfig.players = previousPlayers;
+                $scope.gameConfig.players.forEach((player) => {
+                    player.resetLegsWon();
+                });
+            }
+
+
             $scope.playerCount = (playerCount) => {
                 this.$scope.gameConfig.players = new Array(playerCount);
             };
@@ -46,20 +58,10 @@ module kdarts.home {
             $scope.showNextPhase = () => {
                 $scope.phase += 1;
 
-                if ($scope.phase === 3) {
-                    this.setupPlayers();
-                } else if ($scope.phase === 4) {
+                if ($scope.phase === 4) {
                     this.gameManager.createGame(this.$scope.gameConfig);
                 }
             };
-        }
-
-        setupPlayers() {
-            var i = 0;
-            while (i < this.$scope.gameConfig.players.length) {
-                this.$scope.gameConfig.players[i] = new Player(('Player ' + (i + 1)));
-                i += 1;
-            }
         }
     }
 

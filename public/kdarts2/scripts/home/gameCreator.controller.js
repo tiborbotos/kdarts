@@ -19,6 +19,13 @@ var kdarts;
                     doubleOut: false,
                     players: [new kdarts.Player('Player 1'), new kdarts.Player('Player 2')]
                 };
+                var previousPlayers = gameManager.getPlayers();
+                if (previousPlayers && previousPlayers.length > 0) {
+                    $scope.gameConfig.players = previousPlayers;
+                    $scope.gameConfig.players.forEach(function (player) {
+                        player.resetLegsWon();
+                    });
+                }
                 $scope.playerCount = function (playerCount) {
                     _this.$scope.gameConfig.players = new Array(playerCount);
                 };
@@ -30,21 +37,11 @@ var kdarts;
                 };
                 $scope.showNextPhase = function () {
                     $scope.phase += 1;
-                    if ($scope.phase === 3) {
-                        _this.setupPlayers();
-                    }
-                    else if ($scope.phase === 4) {
+                    if ($scope.phase === 4) {
                         _this.gameManager.createGame(_this.$scope.gameConfig);
                     }
                 };
             }
-            GameCreatorController.prototype.setupPlayers = function () {
-                var i = 0;
-                while (i < this.$scope.gameConfig.players.length) {
-                    this.$scope.gameConfig.players[i] = new kdarts.Player(('Player ' + (i + 1)));
-                    i += 1;
-                }
-            };
             GameCreatorController.$inject = ['$scope', 'gameManager'];
             return GameCreatorController;
         })();

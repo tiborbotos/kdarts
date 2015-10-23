@@ -67,13 +67,13 @@ module kdarts.game {
         toggleTreble() {
             this.getCurrentThrow().toggleTreble();
 
-            console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+            //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
         }
 
         toggleDouble() {
             this.getCurrentThrow().toggleDouble();
 
-            console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+            //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
         }
 
         invalidNumber(num) {
@@ -94,7 +94,7 @@ module kdarts.game {
             this.getCurrentThrow().addNumber(num.toString(), this.getCurrentThrow().isDouble(),
                 this.getCurrentThrow().isTreble());
 
-            console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+            //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
         }
 
         deleteNumber() {
@@ -107,7 +107,7 @@ module kdarts.game {
                 this.getCurrentThrow().setShot(parseInt(shot));
             }
 
-            console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+            //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
         }
 
         clear() {

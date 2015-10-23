@@ -55,6 +55,9 @@ var kdarts;
                     }
                     else if (event.which === 8) {
                         _this.deleteNumber();
+                        if (_this.getCurrentThrow().getShot() === 0) {
+                            _this.previousDart();
+                        }
                         event.preventDefault();
                         scope.$apply();
                     }

@@ -12,39 +12,21 @@ var kdarts;
                 this.gameManager = gameManager;
                 this.outChart = outChart;
                 this.players = gameManager.getPlayers();
-                this.playerIndex = 0;
-                this.previousMatchStarterPlayerIndex = 0;
+                //this.playerIndex = 0;
+                //this.previousMatchStarterPlayerIndex = 0;
                 this.players[0].setMatchStarter(true);
             }
-            X01Controller.prototype.winner = function () {
-                var _this = this;
-                this.$mdDialog.show(this.$mdDialog
-                    .alert()
-                    .title('Winner!')
-                    .content(this.getCurrentPlayer().name + ' won!')
-                    .ok('OK')).then(function () {
-                    if (_this.gameManager.getCurrentLeg() < _this.gameManager.getLegs()) {
-                        _this.gameManager.nextLeg();
-                        if (_this.players.length === 2) {
-                            _this.playerIndex = _this.previousMatchStarterPlayerIndex === 0 ? 1 : 0;
-                            _this.previousMatchStarterPlayerIndex = _this.playerIndex;
-                            _this.players[_this.playerIndex].setMatchStarter(true);
-                        }
-                        else {
-                            _this.playerIndex = 0;
-                        }
-                    }
-                    else {
-                        // go back
-                        _this.$state.go('home');
-                    }
-                });
-            };
             X01Controller.prototype.isLegCounterVisible = function () {
                 return this.gameManager.getLegs() > 1;
             };
+            X01Controller.prototype.getPlayerIndex = function () {
+                return this.gameManager.getPlayerIndex();
+            };
+            X01Controller.prototype.setPlayerIndex = function (value) {
+                this.gameManager.setPlayerIndex(value);
+            };
             X01Controller.prototype.getCurrentPlayer = function () {
-                return this.players[this.playerIndex];
+                return this.players[this.getPlayerIndex()];
             };
             X01Controller.prototype.getCurrentRound = function () {
                 return this.getCurrentPlayer().getActiveRound();
@@ -77,8 +59,7 @@ var kdarts;
                 if (this.getCurrentPlayer() === player && angular.isDefined(bestOutDarts)) {
                     var i = 0, checkDartsIndex = this.getThrowIndex() < 2 ? this.getThrowIndex() : 3;
                     while (i < checkDartsIndex) {
-                        if (this.getCurrentRound().darts[i].getWrittenPoints() !== bestOutDarts[i] &&
-                            (i !== 2 && this.getCurrentRound().darts[i].getPoints() !== 0)) {
+                        if (this.getCurrentRound().darts[i].getWrittenPoints() !== bestOutDarts[i] && (i !== 2 && this.getCurrentRound().darts[i].getPoints() !== 0)) {
                             failedOutAttempt = true;
                         }
                         i++;
@@ -100,15 +81,14 @@ var kdarts;
                 console.log('Saveround');
                 this.getCurrentPlayer().saveRound(this.gameManager.isDoubleOut());
                 if (this.getCurrentPlayer().getPoints() === 0) {
-                    console.log('WINNER!');
-                    this.winner();
+                    this.gameManager.winner(this.getCurrentPlayer());
                 }
                 else {
-                    if (this.playerIndex === this.players.length - 1) {
-                        this.playerIndex = 0;
+                    if (this.getPlayerIndex() === this.players.length - 1) {
+                        this.setPlayerIndex(0);
                     }
                     else {
-                        this.playerIndex += 1;
+                        this.setPlayerIndex(this.getPlayerIndex() + 1);
                     }
                 }
             };

@@ -7,9 +7,6 @@ module kdarts.game {
     class X01Controller {
         static $inject = ['$state', '$mdDialog', 'gameManager', 'outChart'];
 
-        private playerIndex: number;
-        private previousMatchStarterPlayerIndex: number;
-
         public players: Array<Player>;
 
         constructor(private $state: angular.ui.IStateService,
@@ -17,43 +14,25 @@ module kdarts.game {
                     private gameManager: GameManager,
                     private outChart: any) {
             this.players = gameManager.getPlayers();
-            this.playerIndex = 0;
-            this.previousMatchStarterPlayerIndex = 0;
+            //this.playerIndex = 0;
+            //this.previousMatchStarterPlayerIndex = 0;
             this.players[0].setMatchStarter(true);
-        }
-
-        private winner() {
-            this.$mdDialog.show(
-                this.$mdDialog
-                    .alert()
-                    .title('Winner!')
-                    .content(this.getCurrentPlayer().name + ' won!')
-                    .ok('OK')
-            ).then(() => {
-                    if (this.gameManager.getCurrentLeg() < this.gameManager.getLegs()) {
-                        this.gameManager.nextLeg();
-
-                        if (this.players.length === 2) {
-                            this.playerIndex = this.previousMatchStarterPlayerIndex === 0 ? 1 : 0;
-                            this.previousMatchStarterPlayerIndex = this.playerIndex;
-
-                            this.players[this.playerIndex].setMatchStarter(true);
-                        } else {
-                            this.playerIndex = 0;
-                        }
-                    } else {
-                        // go back
-                        this.$state.go('home');
-                    }
-                });
         }
 
         isLegCounterVisible() {
             return this.gameManager.getLegs() > 1;
         }
 
+        getPlayerIndex() {
+            return this.gameManager.getPlayerIndex();
+        }
+
+        setPlayerIndex(value: number) {
+            this.gameManager.setPlayerIndex(value);
+        }
+
         getCurrentPlayer() {
-            return this.players[this.playerIndex];
+            return this.players[this.getPlayerIndex()];
         }
 
         getCurrentRound() {
@@ -124,15 +103,12 @@ module kdarts.game {
             this.getCurrentPlayer().saveRound(this.gameManager.isDoubleOut());
 
             if (this.getCurrentPlayer().getPoints() === 0) {
-                console.log('WINNER!');
-
-                this.winner();
-
+                this.gameManager.winner(this.getCurrentPlayer());
             } else {
-                if (this.playerIndex === this.players.length - 1) { // next round
-                    this.playerIndex = 0;
+                if (this.getPlayerIndex() === this.players.length - 1) { // next round
+                    this.setPlayerIndex(0);
                 } else {
-                    this.playerIndex += 1;
+                    this.setPlayerIndex(this.getPlayerIndex() + 1);
                 }
             }
         }

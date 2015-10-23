@@ -8,7 +8,7 @@
         <div ng-repeat="player in x01Controller.players"
              layout="column"
              class="x01-player"
-             ng-class="{'active-player': $index === x01Controller.playerIndex}">
+             ng-class="{'active-player': $index === x01Controller.getPlayerIndex()}">
 
             <div layout="row" layout-padding layout-align="space-between center" class="padding-bottom-zero">
                 <div class="headline">
@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            <div layout="row" ng-if="$index === x01Controller.playerIndex">
+            <div layout="row" ng-if="$index === x01Controller.getPlayerIndex()">
                 <md-button class="md-raised dart-selector"
                            layout-fill
                            ng-class="{'md-accent': x01Controller.getThrowIndex() === 0}"

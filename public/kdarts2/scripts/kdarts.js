@@ -59,6 +59,9 @@ var kdarts;
         Player.prototype.getLegsWon = function () {
             return this.legsWon;
         };
+        Player.prototype.resetLegsWon = function () {
+            this.legsWon = 0;
+        };
         Player.prototype.isWinner = function () {
             return this.winner;
         };

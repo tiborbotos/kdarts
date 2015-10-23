@@ -82,6 +82,10 @@ module kdarts {
             return this.legsWon;
         }
 
+        resetLegsWon() {
+            this.legsWon = 0;
+        }
+
         isWinner() {
             return this.winner;
         }

@@ -42,7 +42,7 @@ module kdarts.game {
                 } else if (event.which >=48 && event.which <=57) {
                     this.record(event.which - 48);
                     scope.$apply();
-                } else if (event.which === 32 || event.which === 13 || event.which === 188) {
+                } else if (event.which === 32 || event.which === 13 || event.which === 188) { // space, enter, comma
                     if (this.isLastDart() && event.which === 13) {
                         this.saveDarts();
                     } else {
@@ -51,6 +51,9 @@ module kdarts.game {
                     scope.$apply();
                 } else if (event.which === 8) {
                     this.deleteNumber();
+                    if (this.getCurrentThrow().getShot() === 0) {
+                        this.previousDart();
+                    }
                     event.preventDefault();
                     scope.$apply();
                 }

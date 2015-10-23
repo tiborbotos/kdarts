@@ -12,10 +12,14 @@ var kdarts;
                 this.gameManager = gameManager;
                 this.outChart = outChart;
                 this.players = gameManager.getPlayers();
-                //this.playerIndex = 0;
-                //this.previousMatchStarterPlayerIndex = 0;
                 this.players[0].setMatchStarter(true);
             }
+            X01Controller.getAvgPoints = function (player) {
+                return player.getAvg();
+            };
+            X01Controller.getLegsWon = function (player) {
+                return player.getLegsWon();
+            };
             X01Controller.prototype.isLegCounterVisible = function () {
                 return this.gameManager.getLegs() > 1;
             };
@@ -39,12 +43,6 @@ var kdarts;
             };
             X01Controller.prototype.setThrowIndex = function (index) {
                 this.getCurrentRound().throwIndex = index;
-            };
-            X01Controller.prototype.getAvgPoints = function (player) {
-                return player.getAvg();
-            };
-            X01Controller.prototype.getLegsWon = function (player) {
-                return player.getLegsWon();
             };
             X01Controller.prototype.getPointsWithActiveRound = function (player) {
                 if (this.getCurrentPlayer() === player) {

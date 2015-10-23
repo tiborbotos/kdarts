@@ -14,9 +14,15 @@ module kdarts.game {
                     private gameManager: GameManager,
                     private outChart: any) {
             this.players = gameManager.getPlayers();
-            //this.playerIndex = 0;
-            //this.previousMatchStarterPlayerIndex = 0;
             this.players[0].setMatchStarter(true);
+        }
+
+        static getAvgPoints(player: Player) {
+            return player.getAvg();
+        }
+
+        static getLegsWon(player: Player) {
+            return player.getLegsWon();
         }
 
         isLegCounterVisible() {
@@ -49,14 +55,6 @@ module kdarts.game {
 
         setThrowIndex(index: number) {
             this.getCurrentRound().throwIndex = index;
-        }
-
-        getAvgPoints(player: Player) {
-            return player.getAvg();
-        }
-
-        getLegsWon(player: Player) {
-            return player.getLegsWon();
         }
 
         getPointsWithActiveRound(player: Player) {

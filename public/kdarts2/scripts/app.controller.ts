@@ -28,6 +28,8 @@ module kdarts.home {
                     private gameManager: kdarts.game.GameManager) {
             this.buildToggler('left');
 
+            console.log('Start app');
+
             $scope.close = () => {
                 this.$mdSidenav('left').close()
                     .then(function () {

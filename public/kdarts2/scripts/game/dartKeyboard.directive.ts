@@ -29,9 +29,13 @@ module kdarts.game {
             return directive;
         }
 
+        private log(input) {
+            console.log(input);
+        }
+
         private initialize(scope: DartKeyboardScope) {
             angular.element(document.body).bind('keydown', (event:JQueryKeyEventObject) => {
-                //console.log(event.which);
+                this.log(event.which);
 
                 if (event.which === 116 || event.which === 84) {
                     this.toggleTreble();
@@ -42,13 +46,17 @@ module kdarts.game {
                 } else if (event.which >=48 && event.which <=57) {
                     this.record(event.which - 48);
                     scope.$apply();
-                } else if (event.which === 32 || event.which === 13 || event.which === 188) { // space, enter, comma
+                } else if (event.which === 32 || event.which === 13 || event.which === 188 || event.which === 39) { // space, enter, comma, cursor move right
                     if (this.isLastDart() && event.which === 13) {
                         this.saveDarts();
                     } else {
                         this.nextDart();
                     }
                     scope.$apply();
+                } else if (event.which === 37) { // cursor move left
+                    if (!this.isFirstDart()) {
+                        this.previousDart();
+                    }
                 } else if (event.which === 8) {
                     this.deleteNumber();
                     if (this.getCurrentThrow().getShot() === 0) {
@@ -67,13 +75,13 @@ module kdarts.game {
         toggleTreble() {
             this.getCurrentThrow().toggleTreble();
 
-            //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+            this.log('Toggle treble: ' + this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
         }
 
         toggleDouble() {
             this.getCurrentThrow().toggleDouble();
 
-            //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+            this.log('Toggle double: ' + this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
         }
 
         invalidNumber(num) {
@@ -93,8 +101,6 @@ module kdarts.game {
         record(num) {
             this.getCurrentThrow().addNumber(num.toString(), this.getCurrentThrow().isDouble(),
                 this.getCurrentThrow().isTreble());
-
-            //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
         }
 
         deleteNumber() {
@@ -106,8 +112,6 @@ module kdarts.game {
                 }
                 this.getCurrentThrow().setShot(parseInt(shot));
             }
-
-            //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
         }
 
         clear() {
@@ -125,6 +129,7 @@ module kdarts.game {
         }
 
         nextDart() {
+            this.log('nextDart ' + this.$scope.round.throwIndex);
             if (this.$scope.round.throwIndex < 2) {
                 this.$scope.round.throwIndex += 1;
             }
@@ -137,6 +142,7 @@ module kdarts.game {
         }
 
         saveDarts() {
+            this.log('saveDarts ');
             this.$scope.onSave();
         }
     }

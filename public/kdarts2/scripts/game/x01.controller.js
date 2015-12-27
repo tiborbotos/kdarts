@@ -14,10 +14,10 @@ var kdarts;
                 this.players = gameManager.getPlayers();
                 this.players[0].setMatchStarter(true);
             }
-            X01Controller.getAvgPoints = function (player) {
+            X01Controller.prototype.getAvgPoints = function (player) {
                 return player.getAvg();
             };
-            X01Controller.getLegsWon = function (player) {
+            X01Controller.prototype.getLegsWon = function (player) {
                 return player.getLegsWon();
             };
             X01Controller.prototype.isLegCounterVisible = function () {

@@ -17,11 +17,11 @@ module kdarts.game {
             this.players[0].setMatchStarter(true);
         }
 
-        static getAvgPoints(player: Player) {
+        getAvgPoints(player: Player) {
             return player.getAvg();
         }
 
-        static getLegsWon(player: Player) {
+        getLegsWon(player: Player) {
             return player.getLegsWon();
         }
 

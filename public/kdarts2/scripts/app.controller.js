@@ -13,9 +13,9 @@ var kdarts;
                 this.$state = $state;
                 this.gameManager = gameManager;
                 this.buildToggler('left');
+                console.log('Start app');
                 $scope.close = function () {
-                    _this.$mdSidenav('left').close()
-                        .then(function () {
+                    _this.$mdSidenav('left').close().then(function () {
                     });
                 };
                 $scope.openMenu = function () {

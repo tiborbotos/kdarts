@@ -4,7 +4,8 @@
   "description": "Darts score keeper for x01 games",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "css": "scss public/kdarts2/styles/_kdarts.scss"
   },
   "dependencies": {
     "deployd": "0.8.5"

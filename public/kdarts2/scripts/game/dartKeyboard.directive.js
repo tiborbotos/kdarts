@@ -28,10 +28,13 @@ var kdarts;
                 directive['$inject'] = [];
                 return directive;
             };
+            DartKeyboard.prototype.log = function (input) {
+                console.log(input);
+            };
             DartKeyboard.prototype.initialize = function (scope) {
                 var _this = this;
                 angular.element(document.body).bind('keydown', function (event) {
-                    //console.log(event.which);
+                    _this.log(event.which);
                     if (event.which === 116 || event.which === 84) {
                         _this.toggleTreble();
                         scope.$apply();
@@ -44,7 +47,7 @@ var kdarts;
                         _this.record(event.which - 48);
                         scope.$apply();
                     }
-                    else if (event.which === 32 || event.which === 13 || event.which === 188) {
+                    else if (event.which === 32 || event.which === 13 || event.which === 188 || event.which === 39) {
                         if (_this.isLastDart() && event.which === 13) {
                             _this.saveDarts();
                         }
@@ -52,6 +55,11 @@ var kdarts;
                             _this.nextDart();
                         }
                         scope.$apply();
+                    }
+                    else if (event.which === 37) {
+                        if (!_this.isFirstDart()) {
+                            _this.previousDart();
+                        }
                     }
                     else if (event.which === 8) {
                         _this.deleteNumber();
@@ -68,11 +76,11 @@ var kdarts;
             };
             DartKeyboard.prototype.toggleTreble = function () {
                 this.getCurrentThrow().toggleTreble();
-                //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+                this.log('Toggle treble: ' + this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
             };
             DartKeyboard.prototype.toggleDouble = function () {
                 this.getCurrentThrow().toggleDouble();
-                //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
+                this.log('Toggle double: ' + this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
             };
             DartKeyboard.prototype.invalidNumber = function (num) {
                 return !kdarts.DartThrow.isValidShot(this.getCurrentThrow().getShot() + num.toString(), this.getCurrentThrow().isDouble(), this.getCurrentThrow().isTreble());
@@ -85,7 +93,6 @@ var kdarts;
             };
             DartKeyboard.prototype.record = function (num) {
                 this.getCurrentThrow().addNumber(num.toString(), this.getCurrentThrow().isDouble(), this.getCurrentThrow().isTreble());
-                //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
             };
             DartKeyboard.prototype.deleteNumber = function () {
                 if (this.getCurrentThrow().getShot() > 0) {
@@ -96,7 +103,6 @@ var kdarts;
                     }
                     this.getCurrentThrow().setShot(parseInt(shot));
                 }
-                //console.log('Shot: ', this.getCurrentThrow().getShot() + ' = ' + this.getCurrentThrow().getPoints());
             };
             DartKeyboard.prototype.clear = function () {
                 this.getCurrentThrow().setDouble(false);
@@ -110,6 +116,7 @@ var kdarts;
                 return this.$scope.round.throwIndex === 2;
             };
             DartKeyboard.prototype.nextDart = function () {
+                this.log('nextDart ' + this.$scope.round.throwIndex);
                 if (this.$scope.round.throwIndex < 2) {
                     this.$scope.round.throwIndex += 1;
                 }
@@ -120,6 +127,7 @@ var kdarts;
                 }
             };
             DartKeyboard.prototype.saveDarts = function () {
+                this.log('saveDarts ');
                 this.$scope.onSave();
             };
             return DartKeyboard;

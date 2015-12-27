@@ -24,7 +24,7 @@
             <p class="md-subhead margin-top-zero slide-downx" ng-show="phase === 3">Configure Players</p>
         </header>
 
-        <div flex layout="column" class="slide-downx" ng-show="phase === 1">
+        <div flex layout="column" ng-show="phase === 1">
             <md-button class="md-raised"
                        ng-class="{'md-accent': gameConfig.game === '170'}"
                        ng-click="setGame('170')">170
@@ -39,7 +39,7 @@
             </md-button>
         </div>
 
-        <md-input-container layout-margin class="slide-downx" ng-show="phase === 1">
+        <md-input-container ng-show="phase === 1">
             <label>Legs</label>
             <md-select name="myModel" ng-model="gameConfig.legs">
                 <md-option value="1">1 leg</md-option>
@@ -62,7 +62,7 @@
 
         <!-- PHASE2 -->
         <div layout="column" class="slide-downx" ng-if="phase === 2">
-            <label layout-padding>Players</label>
+            <h4>Players</h4>
             <div layout="row">
                 <md-button class="md-raised"
                            layout-fill
@@ -79,8 +79,9 @@
             </div>
         </div>
 
-        <div layout="column" class="slide-downx" ng-if="phase === 2">
-            <label layout-padding class="padding-bottom-zero margin-top-small">Rules</label>
+
+        <div layout="column" ng-if="phase === 2">
+            <h4 class="margin-top-small">Rules</h4>
             <!-- TODO -->
             <!--<md-checkbox ng-model="gameConfig.doubleIn" class="margin-bottom-zero">Double in</md-checkbox>-->
             <md-checkbox ng-model="gameConfig.doubleOut">Double out</md-checkbox>

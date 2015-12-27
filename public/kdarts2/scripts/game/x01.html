@@ -4,7 +4,11 @@
         <dart-keyboard round="x01Controller.getCurrentRound()" on-save="x01Controller.saveRound()"></dart-keyboard>
     </div>
 
-    <div layout="column">
+    <div flex
+         layout="column"
+         >
+         <!--layout-fill-->
+        <!--layout-gt-xs="row"-->
         <div ng-repeat="player in x01Controller.players"
              layout="column"
              class="x01-player"

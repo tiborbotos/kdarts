@@ -1109,7 +1109,9 @@ span.name {
   @media screen and (min-width: 600px) {
     .bottom-action-container {
       display: none; } }
-
+.action-container {
+  display: none
+}
 @media screen and (min-width: 600px) {
   .action-container {
     display: block; } }

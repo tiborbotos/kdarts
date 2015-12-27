@@ -77,9 +77,10 @@ var kdarts;
             };
             X01Controller.prototype.saveRound = function () {
                 console.log('Saveround');
-                this.getCurrentPlayer().saveRound(this.gameManager.isDoubleOut());
-                if (this.getCurrentPlayer().getPoints() === 0) {
-                    this.gameManager.winner(this.getCurrentPlayer());
+                var currentPlayer = this.getCurrentPlayer();
+                currentPlayer.saveRound(this.gameManager.isDoubleOut());
+                if (currentPlayer.getPoints() === 0) {
+                    this.gameManager.setWinner(this.getCurrentPlayer());
                 }
                 else {
                     if (this.getPlayerIndex() === this.players.length - 1) {

@@ -55,7 +55,7 @@ var kdarts;
                 this.nextLeg();
                 this.$state.go('x01game');
             };
-            GameManager.prototype.winner = function (player) {
+            GameManager.prototype.setWinner = function (player) {
                 var _this = this;
                 this.$mdDialog.show(this.$mdDialog.alert().title('Winner!').content(player.name + ' won!').ok('OK')).then(function () {
                     if (_this.getCurrentLeg() < _this.getLegs()) {

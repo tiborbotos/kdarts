@@ -34,7 +34,7 @@ module kdarts.game {
         }
 
         private initialize(scope: DartKeyboardScope) {
-            angular.element(document.body).bind('keydown', (event:JQueryKeyEventObject) => {
+            angular.element(document.body).bind('keydown', (event: JQueryKeyEventObject) => {
                 this.log(event.which);
 
                 if (event.which === 116 || event.which === 84) {
@@ -43,7 +43,7 @@ module kdarts.game {
                 } else if (event.which === 100 || event.which === 68) {
                     this.toggleDouble();
                     scope.$apply();
-                } else if (event.which >=48 && event.which <=57) {
+                } else if (event.which >= 48 && event.which <= 57) {
                     this.record(event.which - 48);
                     scope.$apply();
                 } else if (event.which === 32 || event.which === 13 || event.which === 188 || event.which === 39) { // space, enter, comma, cursor move right
@@ -56,6 +56,7 @@ module kdarts.game {
                 } else if (event.which === 37) { // cursor move left
                     if (!this.isFirstDart()) {
                         this.previousDart();
+                        scope.$apply();
                     }
                 } else if (event.which === 8) {
                     this.deleteNumber();

@@ -40,7 +40,7 @@
         </div>
 
         <md-input-container ng-show="phase === 1">
-            <label>Legs</label>
+            <label>First to</label>
             <md-select name="myModel" ng-model="gameConfig.legs">
                 <md-option value="1">1 leg</md-option>
                 <md-option value="2">2 legs</md-option>
@@ -63,6 +63,22 @@
         <!-- PHASE2 -->
         <div layout="column" class="slide-downx" ng-if="phase === 2">
             <h4>Players</h4>
+
+            <!--<md-list class="md-margin slide-downx">-->
+                <!--<md-list-item ng-repeat="player in gameConfig.players">-->
+                    <!--<div layout="row" layout-fill >-->
+                        <!--<md-input-container layout-fill class="no-padding md-block">-->
+                            <!--<label>Name</label>-->
+                            <!--<input ng-model="player.name" layout-fill type="text">-->
+                        <!--</md-input-container>-->
+                        <!--<md-button flex="20" class="md-raised login-button">Login</md-button>-->
+                    <!--</div>-->
+                <!--</md-list-item>-->
+            <!--</md-list>-->
+
+            <!--<md-button class="md-raised"-->
+                       <!--layout-fill-->
+                       <!--ng-click="addPlayer()">Add</md-button>-->
             <div layout="row">
                 <md-button class="md-raised"
                            layout-fill

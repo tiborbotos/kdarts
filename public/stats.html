@@ -97,7 +97,7 @@
 		}, function (results, error) {
 			$('#stats').children().remove();
 			$.each(results, function (i, item) {
-				$('<tr><td>' + new Date(item.started) + '</td><td>' + item.game + '</td><td>' + item.winner + '</td><td>' + item.avg + '</td><td>' + item.avg9 + '</td></tr>').appendTo('#stats');
+				$('<tr><td>' + new Date(item.started) + '</td><td>' + item.game + '</td><td>' + item.setWinner + '</td><td>' + item.avg + '</td><td>' + item.avg9 + '</td></tr>').appendTo('#stats');
 			});
 
 		});

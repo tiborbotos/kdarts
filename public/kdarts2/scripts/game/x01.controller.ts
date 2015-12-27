@@ -97,15 +97,16 @@ module kdarts.game {
 
         saveRound() {
             console.log('Saveround');
+            var currentPlayer = this.getCurrentPlayer();
 
-            this.getCurrentPlayer().saveRound(this.gameManager.isDoubleOut());
+            currentPlayer.saveRound(this.gameManager.isDoubleOut());
 
-            if (this.getCurrentPlayer().getPoints() === 0) {
-                this.gameManager.winner(this.getCurrentPlayer());
+            if (currentPlayer.getPoints() === 0) {
+                this.gameManager.setWinner(this.getCurrentPlayer());
             } else {
                 if (this.getPlayerIndex() === this.players.length - 1) { // next round
                     this.setPlayerIndex(0);
-                } else {
+                } else { // next player
                     this.setPlayerIndex(this.getPlayerIndex() + 1);
                 }
             }

@@ -8,14 +8,14 @@ module kdarts.game {
 
         static $inject = ['$state', '$mdDialog'];
 
-        private gameConfig:GameConfig;
-        private currentLeg:number;
-        private legs:number;
+        private gameConfig: GameConfig;
+        private currentLeg: number;
+        private legs: number;
         private playerIndex: number;
         private previousMatchStarterPlayerIndex: number;
 
-        constructor(private $state:angular.ui.IStateService,
-                    private $mdDialog:angular.material.IDialogService) {
+        constructor(private $state: angular.ui.IStateService,
+                    private $mdDialog: angular.material.IDialogService) {
         }
 
         getPlayers() {
@@ -37,7 +37,7 @@ module kdarts.game {
             return this.gameConfig.legs;
         }
 
-        createGame(config:GameConfig) {
+        createGame(config: GameConfig) {
             this.gameConfig = config;
             this.currentLeg = 0;
             this.previousMatchStarterPlayerIndex = 0;
@@ -50,7 +50,7 @@ module kdarts.game {
         nextLeg() {
             this.currentLeg += 1;
 
-            angular.forEach(this.gameConfig.players, (player:Player) => {
+            angular.forEach(this.gameConfig.players, (player: Player) => {
                 player.initialize(this.gameConfig.game);
             });
         }
@@ -66,7 +66,7 @@ module kdarts.game {
         resetGame() {
             this.currentLeg = 0;
             this.previousMatchStarterPlayerIndex = 0;
-            angular.forEach(this.gameConfig.players, (player:Player) => {
+            angular.forEach(this.gameConfig.players, (player: Player) => {
                 player.resetLegsWon();
             });
 
@@ -75,7 +75,7 @@ module kdarts.game {
             this.$state.go('x01game');
         }
 
-        winner(player:Player) {
+        setWinner(player: Player) {
             this.$mdDialog.show(
                 this.$mdDialog
                     .alert()
@@ -102,7 +102,7 @@ module kdarts.game {
                                 .content('Would you like a replay?')
                                 .ok('Yes')
                                 .cancel('No')
-                            ).then((res) => {
+                        ).then((res) => {
                                 this.resetGame();
                             }).catch(() => {
                                 this.$state.go('home');

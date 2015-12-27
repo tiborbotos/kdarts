@@ -59,6 +59,7 @@ var kdarts;
                     else if (event.which === 37) {
                         if (!_this.isFirstDart()) {
                             _this.previousDart();
+                            scope.$apply();
                         }
                     }
                     else if (event.which === 8) {

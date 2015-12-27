@@ -99,7 +99,7 @@ module kdarts {
                 } else if (this.points === activeRoundPoints) {
                     if (this.lastValidDart().isDouble() || this.lastValidDart().shot === 50) {
                         this.points = 0;
-                        // winner
+                        // setWinner
                     } else {
                         this.getActiveRound().wasted = true;
                     }

@@ -1,8 +1,87 @@
-node_modules
-.idea/
-.dpd/
-data/
+# Ignore Visual Studio  Project #
+###################
+*.user
+*.gpState
+*.suo
+bin
+obj
+.vscode/
 
-*.sublime-project
-*.sublime-workspace
-.sass-cache
+# Ignore buildkite created script file
+# buildkite-script*
+
+# Ignore Node & Bower
+###################
+node_modules
+bower_components
+target
+.tmp
+
+# Ignore Test reporters
+###################
+**/coverage
+reports
+test-results.xml
+coverage.xml
+
+# Ignore Web Storm #
+.idea
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.xap
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+# *.sdf
+*.mdf
+*.ldf
+
+# OS generated files #
+######################
+.DS_Store*
+ehthumbs.db
+Thumbs.db
+
+# Project files #
+######################
+dist
+generated
+credentials.json
+/**/lib/
+
+# IntelliJ #
+######################
+**.iml
+*.idea
+
+# Wercker #
+######################
+.wercker
+wercker.env
+
+# Webpack #
+######################
+webpack-local-config.env

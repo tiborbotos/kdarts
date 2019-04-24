@@ -1,0 +1,50 @@
+<div layout="column">
+
+  <div layout="row">
+    <button mat-button mat-raised-button layout-fill
+            [disabled]="isTrebleDisabled()"
+            [class.mat-accent]="getCurrentThrow().isTreble()"
+            (click)="toggleTreble()">Treble
+    </button>
+    <button mat-button mat-raised-button layout-fill
+            [disabled]="isDoubleDisabled()"
+            [class.mat-accent]="getCurrentThrow().isDouble()"
+            (click)="toggleDouble()">Double
+    </button>
+  </div>
+
+  <div layout="row">
+    <button mat-button mat-raised-button layout-fill [disabled]="invalidNumber(7)" (click)="record(7)">7</button>
+    <button mat-button mat-raised-button layout-fill [disabled]="invalidNumber(8)" (click)="record(8)">8</button>
+    <button mat-button mat-raised-button layout-fill [disabled]="invalidNumber(9)" (click)="record(9)">9</button>
+  </div>
+
+  <div layout="row">
+    <button mat-button mat-raised-button layout-fill [disabled]="invalidNumber(4)" (click)="record(4)">4</button>
+    <button mat-button mat-raised-button layout-fill [disabled]="invalidNumber(5)" (click)="record(5)">5</button>
+    <button mat-button mat-raised-button layout-fill [disabled]="invalidNumber(6)" (click)="record(6)">6</button>
+  </div>
+
+  <div layout="row">
+    <button mat-button mat-raised-button layout-fill [disabled]="invalidNumber(1)" (click)="record(1)">1</button>
+    <button mat-button mat-raised-button layout-fill [disabled]="invalidNumber(2)" (click)="record(2)">2</button>
+    <button mat-button mat-raised-button layout-fill [disabled]="invalidNumber(3)" (click)="record(3)">3</button>
+  </div>
+
+  <div layout="row">
+    <button mat-button mat-raised-button layout-fill [disabled]="getCurrentThrow().getShot() == 0"
+            (click)="deleteNumber()">←
+    </button>
+    <button mat-button mat-raised-button layout-fill [disabled]="invalidNumber(0)" (click)="record(0)">0</button>
+    <button mat-button class="mat-raised mat-warn" layout-fill (click)="clear()">C</button>
+  </div>
+
+  <div layout="row">
+    <button mat-button mat-raised-button layout-fill (click)="previousDart()" [disabled]="isFirstDart()">Previous
+    </button>
+    <button mat-button mat-raised-button class="mat-primary md-hue-3" layout-fill (click)="nextDart()"
+            *ngIf="!isLastDart()">Next Dart
+    </button>
+    <button mat-button mat-raised-button layout-fill (click)="saveDarts()">Save</button>
+  </div>
+</div>

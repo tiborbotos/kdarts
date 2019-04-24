@@ -1,0 +1,67 @@
+<div class="x01-game">
+
+  <div class="bottom-action-container virtual-keyboard-container" *ngIf="players">
+    <app-dart-keyboard [round]="getCurrentRound()" (onSave)="saveRound()"></app-dart-keyboard>
+  </div>
+
+  <div flex
+       layout="column">
+    <!--layout-fill-->
+    <!--layout-gt-xs="row"-->
+    <div *ngFor="let player of players;index as $index;"
+         layout="column"
+         class="x01-player"
+         [class.active-player]="$index === getPlayerIndex()">
+
+      <div layout="row" layout-padding layout-align="space-between center" class="padding-bottom-zero">
+        <div class="headline">
+          <span>{{player.name}}</span>
+        </div>
+        <div class="headline">
+          <span class="md-caption" title="Avarege">{{getAvgPoints(player)}}</span>
+          <span class="legs"
+                *ngIf="isLegCounterVisible()">{{getLegsWon(player)}}</span>
+
+          <span *ngIf="!player.isWinner()"
+                class="current-points"
+                [class.wasted]="getPointsWithActiveRound(player) < 0">
+                    {{getPointsWithActiveRound(player)}}
+                    </span>
+          <span *ngIf="player.isWinner()">WON</span>
+        </div>
+      </div>
+
+      <div layout="row" *ngIf="$index === getPlayerIndex()">
+        <button class="dart-selector"
+                mat-button
+                mat-raised-button
+                layout-fill
+                [class.mat-accent]="getThrowIndex() === 0"
+                (click)="setThrowIndex(0)">{{getWrittenPoints(0)}}</button>
+        <button class="dart-selector"
+                mat-button
+                mat-raised-button
+                layout-fill
+                [class.mat-accent]="getThrowIndex() === 1"
+                (click)="setThrowIndex(1)">{{getWrittenPoints(1)}}</button>
+        <button class="mat-raised dart-selector"
+                mat-button
+                mat-raised-button
+                layout-fill
+                [class.mat-accent]="getThrowIndex() === 2"
+                (click)="setThrowIndex(2)">{{getWrittenPoints(2)}}</button>
+      </div>
+
+      <div layout="row"
+           class="out-chart"
+           [class.failed]="getOutChart(player).failedOutAttempt"
+           *ngIf="getOutChart(player).darts">
+
+                <span class="item"
+                      *ngFor="let out of getOutChart(player).darts"
+                      layout-fill>{{out}}</span>
+      </div>
+    </div>
+
+  </div>
+</div>

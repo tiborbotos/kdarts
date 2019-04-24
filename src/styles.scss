@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "game";
+@import "home";
+
+[flex],[layout-fill] {
+  //display: flex;
+  flex: 1;
+
+  //[layout-fill] {
+  //}
+}
+[flex="20"] {
+  flex: 20;
+}
+
+[layout="row"] {
+  flex-direction: row;
+  display: flex;
+}
+
+[layout="column"] {
+  flex-direction: column;
+  display: flex;
+}
+
+[layout-align="center center"] {
+  justify-content: center;
+  align-items: center;
+}
+[layout-align="space-between center"] {
+  justify-content: space-between;
+  align-items: center;
+}

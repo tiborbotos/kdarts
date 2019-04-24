@@ -1,0 +1,65 @@
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+
+body.kdarts2 {
+  .margin-top-small {
+    margin-top: 15px;
+  }
+  .margin-bottom-small {
+    margin-bottom: 15px;
+  }
+
+  .margin-top-medium {
+    margin-top: 26px;
+  }
+
+  .margin-top-zero {
+    margin-top: 0;
+  }
+
+  .margin-bottom-zero {
+    margin-bottom: 0;
+  }
+
+  .padding-bottom-zero {
+    padding-bottom: 0;
+  }
+
+  .no-padding {
+    padding: 0;
+  }
+
+  button.login-button {
+    text-align: center;
+    margin-right: 0;
+  }
+}
+
+.darts-round-count {
+  opacity: 0.9;
+  -webkit-filter: invert(100%);
+  filter: invert(100%);
+  height: 22px;
+  margin-top: 4px;
+  padding: 2px;
+}
+
+/* Game creator */
+header {
+  p {
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+.kdarts-content {
+  @media screen and (min-width: 600px) {
+    width: 60%;
+    margin-left: 20%;
+  }
+
+  @media screen and (min-width: 960px) {
+    width: 40%;
+    margin-left: 30%;
+  }
+}

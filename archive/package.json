@@ -1,0 +1,21 @@
+{
+  "name": "KDarts",
+  "version": "1.1.1",
+  "description": "Darts score keeper for x01 games",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "css": "scss public/kdarts2/styles/_kdarts.scss"
+  },
+  "dependencies": {
+    "deployd": "0.8.5"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm":  "1.2.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tiborbotos/kdarts"
+  }
+}
